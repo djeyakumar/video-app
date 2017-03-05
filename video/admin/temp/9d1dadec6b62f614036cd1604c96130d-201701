@@ -1,0 +1,27 @@
+<li class='news-recent'>
+<span class='news-label-new border-radius2'>NEW</span>
+<a href="http://www.phpsugar.com/blog/2017/01/php-melody-v2-7-1-critical-vulnerability-patched/" target="_blank">
+<h4>PHP Melody v2.7.1 &#8211; Critical Vulnerability Patched</h4></a>
+<p><![CDATA[This week we received news of a critical vulnerabilities in PHP Melody. Issues include: SQL/code injection, PHPMailer vulnerability (see CVE-2017-5223) and a couple more. To date, PHP Melody has been actively used on more than 29,000 separate websites in the past 9 years. Thankfully, we received no reports of sites being hacked via exploitable code in [&#8230;]]]></p>
+
+</li>
+<li>
+<a href="http://www.phpsugar.com/blog/2016/08/flash-officially-dead-use-php-melody-v2-7/" target="_blank">
+<h4>Adobe Flash Officially Dead. Use PHP Melody v2.7</h4></a>
+
+</li>
+<li>
+<a href="http://www.phpsugar.com/blog/2016/05/php-melody-v2-7-available-now/" target="_blank">
+<h4>PHP Melody v2.7 &#8211; Available Now!</h4></a>
+
+</li>
+<li>
+<a href="http://www.phpsugar.com/blog/2016/05/php-melody-v2-7-available-this-friday/" target="_blank">
+<h4>PHP Melody v2.7 &#8211; Available this Friday</h4></a>
+
+</li>
+<li>
+<a href="http://www.phpsugar.com/blog/2016/04/echo-getting-even-better-must-have-update/" target="_blank">
+<h4>Echo &#8211; Getting Even Better (Must-have Update)</h4></a>
+
+</li>

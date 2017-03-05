@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /video/admin/
+Disallow: /video/relatedclips.php
+Disallow: /video/fpembed.php
+Disallow: /video/embed.php
+Disallow: /video/embed/
+Disallow: /video/mobile/
