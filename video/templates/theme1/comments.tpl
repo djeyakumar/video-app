@@ -1,6 +1,6 @@
 {if $allow_comments == '1'}
 
-	<h2 class="upper-blue">{$lang.post_comment}</h2>
+	<h3>{$lang.post_comment}</h3>
 	{if ($comment_system_native + $comment_system_facebook + $comment_system_disqus) > 1}
 	<ul class="nav nav-tabs nav-comments">
 		{if $comment_system_native}
@@ -22,7 +22,7 @@
 				{$must_sign_in}
 			{/if}
 			
-			<h2 class="upper-blue">{$lang.comments}</h2>
+			<h3>{$lang.comments}</h3>
 			
 			<div class="pm-comments comment_box">
 				{if $comment_count == 0}

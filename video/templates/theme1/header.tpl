@@ -151,15 +151,15 @@
 	{if isset($mm_header_inject)}{$mm_header_inject}{/if}
 </head>
 {if $tpl_name == "video-category"}
-<body class="watching">
+<body class="with-slide">
 {elseif $tpl_name == "video-watch"}
 <body class="watching">
 {elseif $tpl_name == "article-category"}
-<body class="watching">
+<body class="with-slide">
 {elseif $tpl_name == "article-read"}
-<body class="watching">
+<body class="with-slide">
 {elseif $tpl_name == "page"}
-<body class="watching">
+<body class="with-slide">
 {else}
 <body class="with-slide">
 {/if}

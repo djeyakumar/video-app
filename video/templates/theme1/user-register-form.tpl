@@ -3,7 +3,7 @@
   <fieldset>
     <div class="control-group">
       <label class="control-label" for="name">{$lang.your_name}</label>
-      <div class="controls"><input type="text" class="input-large" name="name" value="{$inputs.name}"></div>
+      <div class="controls"><input type="text" class="form-control" name="name" value="{$inputs.name}"></div>
     </div>
     <div class="control-group">
       <label class="control-label" for="username">{$lang.username}</label>

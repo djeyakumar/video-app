@@ -33,7 +33,7 @@ $db_host = 'localhost';
 
 // Full URL without any trailing slash (e.g http://www.example.com)
 // define('_URL', 'http://www.shahid1.tv/video');	
-define('_URL', 'http://localhost/projects/shahid1/video');	
+define('_URL', 'http://localhost/projects/video-app/video');	
 
 //-- Customer ID --//
 // Replace "YOUR_CUSTOMER_ID" below with the assigned "Customer ID".
