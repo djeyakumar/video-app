@@ -104,7 +104,7 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 
     </div>
     </div>
-    
+
     <div class="control-group">
 	<div class="pull-right" style="position: absolute; top: 4px; right: 4px;">
 	<span class="btn fileinput-button">
@@ -119,6 +119,23 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 	<span class="upload-file-dropzone"></span>
 	<span class="autosave-message"></span>
     </div>
+    <div class="control-group">
+    	<div class="row-fluid">
+    	<div class="span6">
+			<label>Country</label>
+			<?php $countries = list_countries();?>
+			<select name="country_id" id="country_id">
+				<?php foreach ($countries as $key => $country) : ?>
+					<option value="<?=$country['id'];?>"><?=$country['name'];?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="span6">
+			<label>Year</label>
+			<input type="text" name="video_year" id="video_year" />
+		</div>
+		</div>
+	</div>
     </div>
 	
 	<div class="widget border-radius4 shadow-div" id="custom-fields">
@@ -296,6 +313,19 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 				
             </div>
             </div>
+
+            <div class="control-group">
+            	<label><b>Select Video Type</b></label>
+            	<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="0" checked>Movie</label>
+				<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="1">TV Series</label>
+            </div>
+
+            <div class="control-group">
+	            <label>Recommended: <span id="value-recommended"><strong><?php echo ($video_details['recommended'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-recommended">Edit</a></label>
+	            <div class="controls" id="show-opt-recommended">
+	                <label><input type="checkbox" name="recommended" id="recommended" value="1" <?php if($video_details['recommended'] == 1) echo 'checked="checked"';?> /> Yes, mark as recommended</label>
+	            </div>
+            </div>
 			
             <div class="control-group">
             <label>Featured: <span id="value-featured"><strong><?php echo ($video_details['featured'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-featured">Edit</a></label>
@@ -343,6 +373,8 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 	    <label>Original Video URL <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Warning" data-content="Changing this URL will re-import the video. All other data (title, tags, description, etc.) will remain the same."></i> <a href="#" id="show-vs1">Edit</a></label>
 	    <div class="controls" id="show-opt-vs1">
 	    <input type="text" name="direct" class="bigger span12" value="<?php echo $video_details['direct']; ?>" />
+	    <input type="text" name="source2" class="bigger span12" value="<?php echo $video_details['source2']; ?>" />
+	    <input type="text" name="source3" class="bigger span12" value="<?php echo $video_details['source3']; ?>" />
 	    <input type="hidden" name="direct-original" value="<?php echo $video_details['direct']; ?>" placeholder="http://"  />
 	    </div>
 	    </div>
@@ -512,9 +544,26 @@ function checkFields(Form) {
 			case 1:		//	STEP 1
 	?>
 
-	<form name="add" action="addvideo.php?step=2" method="post" class="form-inline" onSubmit="return checkFields(this);">
-	<input type="text" id="addvideo_direct_input" name="url" size="30" class="span5" placeholder="http://" /> 
-	<button type="submit" id="addvideo_direct_submit" name="Submit" class="btn">Step 2 &raquo;</button>  <strong><small><a href="#" id="show-help-link-assist">Need help?</a></small></strong>
+	<form name="add" action="addvideo.php?step=2" method="post" class="form-horizontal" onSubmit="return checkFields(this);">
+		<div class="control-group">
+			<label class="control-label" for="addvideo_direct_input">Video Source 1</label>
+			<div class="controls">
+				<input type="text" id="addvideo_direct_input" name="url" size="30" class="span5" placeholder="http://" /> 
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="source2">Video Source 2</label>
+			<div class="controls">
+				<input type="text" id="source2" name="source2" size="30" class="span5" placeholder="http://">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="source3">Video Source 3</label>
+			<div class="controls">
+				<input type="text" id="source3" name="source3" size="30" class="span5" placeholder="http://">
+				<button type="submit" id="addvideo_direct_submit" name="Submit" class="btn">Step 2 &raquo;</button>  <strong><small><a href="#" id="show-help-link-assist">Need help?</a></small></strong>
+			</div>
+		</div>
 	</form>
 	<hr />
 	<?php
@@ -538,6 +587,16 @@ function checkFields(Form) {
 
 			if($_POST['url'] != '' || $_GET['url'] != '')
 				$url = (isset($_POST['url'])) ? trim($_POST['url']) : trim($_GET['url']);
+
+			// Alternate video sources
+			if(isset($_POST["source2"]) && !empty($_POST["source2"])) {
+				$url2 = $_POST["source2"];
+			}
+
+			if(isset($_POST["source3"]) && !empty($_POST["source3"])) {
+				$url3 = $_POST["source3"];
+			}
+			// Alternate video sources ends
 			
 			if($_POST['submitted'] != '' || $_GET['submitted'] != '')
 			{
@@ -560,7 +619,9 @@ function checkFields(Form) {
 			$temp = '';
 			
 			$url = expand_common_short_urls($url);
-			
+			$video_details["source2"] = expand_common_short_urls($url2);
+			$video_details["source3"] = expand_common_short_urls($url3);
+
 			//	Is this a direct link to a video file?
 			if (strpos($url, '?') !== false)
 			{
@@ -764,6 +825,7 @@ function checkFields(Form) {
 						$video_details['source_id'] = ($use_this_src != -1) ? $use_this_src : 1; //	1 = Default for LOCALHOST
 				break;
 			}
+
 			$modframework->trigger_hook('admin_addvideo_step2_mid');
 			//	Prevent adding the same video twice
 			if ($video_details['direct'] != '')
@@ -814,6 +876,7 @@ function checkFields(Form) {
 				$video_details['submitted'] = $submitted;
 				add_video_form($video_details);
 			}
+
 		}	//	endif isset(POST or GET)
 		else
 		{
@@ -971,6 +1034,12 @@ function checkFields(Form) {
 				}
 				else	//	Everything is good. Now we can add the new video to the database
 				{
+					$video_details['source2'] = isset($_POST['source2']) && !empty($_POST['source2']) ? ($_POST['source2']) : '';
+					$video_details['source3'] = isset($_POST['source3']) && !empty($_POST['source3']) ? ($_POST['source3']) : '';
+					$video_details['country_id'] = isset($_POST['country_id']) && !empty($_POST['country_id']) ? ($_POST['country_id']) : 0;
+					$video_details['video_year'] = isset($_POST['video_year']) && !empty($_POST['video_year']) ? ($_POST['video_year']) : 0;
+					$video_details['video_type'] = isset($_POST['video_type']) && !empty($_POST['video_type']) ? ($_POST['video_type']) : 0;
+					$video_details['recommended'] = isset($_POST['recommended']) && !empty($_POST['recommended']) ? ($_POST['recommended']) : 0;
 					if ($_POST['featured'] == '1')
 					{
 						$video_details['featured'] = 1;

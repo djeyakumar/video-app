@@ -205,8 +205,11 @@
 				{else}
 					<a href="{if $smarty.const.USER_DEVICE != 'mobile'}{$smarty.const._URL}/category.php{else}#{/if}">{$lang.category} <b class="caret"></b></a>
 				{/if}
-					<ul class="sub-menu">
-						{dropdown_menu_video_categories max_levels=3}
+					<ul class="sub-menu" style="height: 500px; overflow-y: scroll;">
+						<!-- {dropdown_menu_video_categories max_levels=3} -->
+						{foreach from=$countries key=k item=country}
+						<li><a href>{$country.name}</a></li>
+						{/foreach}
 					</ul>
 				</li>
 

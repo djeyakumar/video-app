@@ -603,6 +603,7 @@ $smarty->assign('fb_comment_numposts', ($config['comments_page'] > 100) ? 100 : 
 $smarty->assign('fb_comment_sorting', $config['fb_comment_sorting']);
 $smarty->assign('fb_app_id', $config['fb_app_id']);
 $smarty->assign('_sources', $_sources);
+$smarty->assign('countries', list_countries());
 $smarty->register_function('make_url_https', 'smarty_make_url_https');
 $smarty->register_function('make_url_relative', 'smarty_make_url_relative');
 $smarty->register_function('filter_text_https_friendly', 'smarty_filter_text_https_friendly');

@@ -155,6 +155,9 @@ if ($_POST['submit'] != '')
 		
 		$uniq_id = generate_video_uniq_id();
 
+		$video_details['source2'] = $_POST['source2'];
+		$video_details['source3'] = $_POST['source3'];
+
 		$video_details['uniq_id'] = $uniq_id;
 		$video_details['yt_id'] = $uniq_id;
 		$modframework->trigger_hook('admin_streamvideo_uploadthumb');
@@ -348,13 +351,26 @@ if ($_POST['submit'] != '')
     </div>
 
 		<div class="widget border-radius4 shadow-div">
-		<h4>Video Source</h4>
+		<h4>Video Source1212</h4>
         <div class="control-group">
-        <label>File <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
-        <div class="controls" id="show-opt-vs1-show">
-        <input name="jw_file" type="text" id="must" value="<?php echo $inputs['jw_file']; ?>" class="bigger span12" />
+        	<label>File 1<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
+        	<div class="controls" id="show-opt-vs1-show">
+        		<input name="jw_file" type="text" id="must" value="<?php echo $inputs['jw_file']; ?>" class="bigger span12" />
+        	</div>
         </div>
-        </div>
+
+        <div class="control-group">
+			<label class="control-label" for="addvideo_direct_input">File 2</label>
+			<div class="controls">
+				<input type="text" id="source2" name="source2" value="<?php echo $inputs['jw_file2']; ?>" class="bigger span12" /> 
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="source3">File 3</label>
+			<div class="controls">
+				<input type="text" id="source3" name="source3" value="<?php echo $inputs['jw_file3']; ?>" class="bigger span12" />
+			</div>
+		</div>
 
         <div class="control-group">
         <label>Streamer <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Location of an RTMP or HTTP server instance to use for streaming."></i></label>

@@ -225,6 +225,7 @@ $(document).ready(function() {
 
 	$(document).ready(function () {
 		 $("input[id^='featured'][type=checkbox]").change(function () { $('#value-featured').text('updated').addClass('label label-success'); });
+		 $("input[id^='recommended'][type=checkbox]").change(function () { $('#value-recommended').text('updated').addClass('label label-success'); });
 		 $("input[id^='visibility'][type=radio]").change(function () { $('#value-visibility').text('updated').addClass('label label-success'); });
 		 $("input[id^='restricted'][type=radio]").change(function () { $('#value-register').text('updated').addClass('label label-success'); });
 		 $("input[class^='pubDate']").change(function () { $('#value-publish').text('updated').addClass('label label-success'); });
@@ -418,6 +419,7 @@ $(document).ready(function() {
 	$('#show-publish').click(function() { $('#show-opt-publish').slideToggle('fast'); return false; });
 	$('#show-thumb').click(function() { $('#show-opt-thumb').slideToggle(50); return false; });
 	$('#show-featured').click(function() { $('#show-opt-featured').slideToggle('fast'); return false; });
+	$('#show-recommended').click(function() { $('#show-opt-recommended').slideToggle('fast'); return false; });
 	$('#show-user').click(function() { $('#show-opt-user').slideToggle('fast'); return false; });
 	$('#show-views').click(function() { $('#show-opt-views').slideToggle('fast'); return false; });
 	$('#show-vs1').click(function() { $('#show-opt-vs1').slideToggle('fast'); return false; });

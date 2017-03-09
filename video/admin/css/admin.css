@@ -2748,7 +2748,7 @@ ul.import-playlists li:hover h4, ul.import-playlists li:hover .playlist-thumb {
 #show-opt-views, #show-opt-user, #show-opt-featured, #show-opt-comments,
 #show-opt-restriction, #show-opt-visibility, #show-opt-publish,
 #show-opt-thumb, #show-opt-showinmenu, #show-opt-embedding,
-#show-opt-permalink, #show-opt-verified, #show-opt-featured {
+#show-opt-permalink, #show-opt-verified, #show-opt-featured, #show-opt-recommended {
   display: none; }
 
 #show-opt-publish input.pubDate,

@@ -1,0 +1,18 @@
+Admin Section
+=============
+Add video from URL, Add video EMBED, STREAM
+	2 additional url
+	country
+	year
+	movie or tv series
+	Under publish add recommended
+
+Country page same as Video Categories
+
+Frontend
+========
+Genre
+Country
+A-Z Movies
+Request
+CHANGE BANNER RIGHT CATGORIES to FANS PAGE
