@@ -91,11 +91,23 @@ if ($_POST['submit'] != '')
 								'allow_comments' => 1,
 								'allow_embedding' => 1,
 								'jw_flashvars' => array('provider' => '',
-														'startparam' => '',
-														'loadbalance' => '',
-														'subscribe' => '',
-														'securetoken' => ''
-												  )
+									'startparam' => '',
+									'loadbalance' => '',
+									'subscribe' => '',
+									'securetoken' => ''
+								),
+								'jw_flashvars2' => array('provider' => '',
+									'startparam' => '',
+									'loadbalance' => '',
+									'subscribe' => '',
+									'securetoken' => ''
+								),
+								'jw_flashvars3' => array('provider' => '',
+									'startparam' => '',
+									'loadbalance' => '',
+									'subscribe' => '',
+									'securetoken' => ''
+								)
 							);
 		
 		$video_details['submitted_user_id'] = (int) $userdata['id'];
@@ -109,24 +121,38 @@ if ($_POST['submit'] != '')
 		$video_details['tags'] 		  = $_POST['tags'];
 		$video_details['direct']	  = $_POST['direct'];
 		$video_details['restricted']  = (int) $_POST['restricted'];
-		$video_details['jw_flashvars']['provider'] 			= $_POST['jw_provider'];
+
 		$video_details['meta']		  = $_POST['meta'];
 		$video_details['allow_comments'] = (int) $_POST['allow_comments'];
 		$video_details['allow_embedding'] = (int) $_POST['allow_embedding'];
 
-		if ($_POST['jw_provider'] == 'rtmp')
-		{
-			$video_details['jw_flashvars']['loadbalance'] 	= $_POST['jw_rtmp_loadbalance'];
-			$video_details['jw_flashvars']['subscribe'] 	= $_POST['jw_rtmp_subscribe'];
-			$video_details['jw_flashvars']['securetoken']	= $_POST['jw_securetoken'];
-		}
-		else if ($_POST['jw_provider'] == 'http')
-		{
-			$video_details['jw_flashvars']['startparam'] 	= trim($_POST['jw_startparam']);
+		for($index=0;$index<3;$index++) {
+			$op="";
+			if($index > 0) {
+				$op = $index;
+			}
+			$video_details['jw_flashvars'.$op]['provider'] = $_POST['jw_provider'.$op];
+			if ($_POST['jw_provider'.$op] == 'rtmp')
+			{
+				$video_details['jw_flashvars'.$op]['loadbalance'] 	= $_POST['jw_rtmp_loadbalance'.$op];
+				$video_details['jw_flashvars'.$op]['subscribe'] 	= $_POST['jw_rtmp_subscribe'.$op];
+				$video_details['jw_flashvars'.$op]['securetoken']	= $_POST['jw_securetoken'.$op];
+			}
+			else if ($_POST['jw_provider'.$op] == 'http')
+			{
+				$video_details['jw_flashvars'.$op]['startparam'] 	= trim($_POST['jw_startparam'.$op]);
+			}
 		}
 
 		// file + streamer combination makes our url_flv unique
 		$video_details['url_flv'] = trim($_POST['jw_file']) .';'. trim($_POST['jw_streamer']);
+		$video_details['url_flv1'] = trim($_POST['jw_file1']) .';'. trim($_POST['jw_streamer1']);
+		$video_details['url_flv2'] = trim($_POST['jw_file2']) .';'. trim($_POST['jw_streamer2']);
+
+		$video_details['country_id'] = isset($_POST['country_id']) && !empty($_POST['country_id']) ? ($_POST['country_id']) : 0;
+		$video_details['video_year'] = isset($_POST['video_year']) && !empty($_POST['video_year']) ? ($_POST['video_year']) : 0;
+		$video_details['video_type'] = isset($_POST['video_type']) && !empty($_POST['video_type']) ? ($_POST['video_type']) : 0;
+		$video_details['recommended'] = isset($_POST['recommended']) && !empty($_POST['recommended']) ? ($_POST['recommended']) : 0;
 
 		$added = validate_item_date($_POST);
 		if ($added === false)
@@ -154,9 +180,6 @@ if ($_POST['submit'] != '')
 		}
 		
 		$uniq_id = generate_video_uniq_id();
-
-		$video_details['source2'] = $_POST['source2'];
-		$video_details['source3'] = $_POST['source3'];
 
 		$video_details['uniq_id'] = $uniq_id;
 		$video_details['yt_id'] = $uniq_id;
@@ -248,40 +271,47 @@ if ($_POST['submit'] != '')
 ?>
 <script type="text/javascript">
 	$(document).ready(function(){
-		switch ($('select[name="jw_provider"]').val())
-		{
-			default:
-			case '':
-				$('.provider_http').hide();
-				$('.provider_rtmp').hide();
-			break;
-			case 'rtmp':
-				$('.provider_http').hide();
-			break;
-			case 'http':
-				$('.provider_rtmp').hide();
-			break;
-
-		}
-
-		$('select[name="jw_provider"]').change(function(){
-			switch(($(this).val()))
+		<?php for($index=0;$index<3;$index++) {
+			$op="";
+			if($index > 0) {
+				$op = $index;
+			}
+		?>
+			switch ($('select[name="jw_provider<?=$op;?>"]').val())
 			{
 				default:
 				case '':
-					$('.provider_http').fadeOut('fast');
-					$('.provider_rtmp').fadeOut('fast');
+					$('.provider_http<?=$op;?>').hide();
+					$('.provider_rtmp<?=$op;?>').hide();
 				break;
 				case 'rtmp':
-					$('.provider_http').hide();
-					$('.provider_rtmp').fadeIn('slow');
+					$('.provider_http<?=$op;?>').hide();
 				break;
 				case 'http':
-					$('.provider_rtmp').hide();
-					$('.provider_http').fadeIn('slow');
+					$('.provider_rtmp<?=$op;?>').hide();
 				break;
+				
 			}
-		});
+			
+			$('select[name="jw_provider<?=$op;?>"]').change(function(){
+				switch(($(this).val()))
+				{
+					default:
+					case '':
+						$('.provider_http<?=$op;?>').fadeOut('fast');
+						$('.provider_rtmp<?=$op;?>').fadeOut('fast');
+					break;
+					case 'rtmp':
+						$('.provider_http<?=$op;?>').hide();
+						$('.provider_rtmp<?=$op;?>').fadeIn('slow');
+					break;
+					case 'http':
+						$('.provider_rtmp<?=$op;?>').hide();
+						$('.provider_http<?=$op;?>').fadeIn('slow');
+					break;
+				}
+			});
+		<?php } ?>
 	});
 </script>
 <div id="adminPrimary">
@@ -348,86 +378,213 @@ if ($_POST['submit'] != '')
 	<span class="upload-file-dropzone"></span>
 	<span class="autosave-message"></span>
     </div>
+    <div class="control-group">
+    	<div class="row-fluid">
+    	<div class="span6">
+			<label>Country</label>
+			<?php $countries = list_countries();?>
+			<select name="country_id" id="country_id">
+				<option value="">Select Country</option>
+				<?php foreach ($countries as $key => $country) : ?>
+					<option value="<?=$country['id'];?>"><?=$country['name'];?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="span6">
+			<label>Year</label>
+			<input type="text" name="video_year" id="video_year" />
+		</div>
+		</div>
+	</div>
     </div>
 
-		<div class="widget border-radius4 shadow-div">
-		<h4>Video Source1212</h4>
-        <div class="control-group">
-        	<label>File 1<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
-        	<div class="controls" id="show-opt-vs1-show">
-        		<input name="jw_file" type="text" id="must" value="<?php echo $inputs['jw_file']; ?>" class="bigger span12" />
-        	</div>
-        </div>
+    <div class="widget border-radius4 shadow-div">
+    	<ul class="nav nav-tabs">
+			<li class="active"><a href="#div_video_source1" data-toggle="tab">Video Source 1</a></li>
+			<li><a href="#div_video_source2" data-toggle="tab">Video Source 2</a></li>
+			<li><a href="#div_video_source3" data-toggle="tab">Video Source 3</a></li>
+		</ul>
+		<div class="tab-content clearfix">
+			<!-- Video Souce 1 -->
+			<div class="tab-pane active" id="div_video_source1">
+			    <!-- <h4>Video Source 1</h4> -->
+			    <div class="control-group">
+			        <label>File 1<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
+			        <div class="controls" id="show-opt-vs1-show">
+			            <input name="jw_file" type="text" id="must" value="<?php echo $inputs['jw_file']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Streamer <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Location of an RTMP or HTTP server instance to use for streaming."></i></label>
+			        <div class="controls" id="show-opt-vs2-show">
+			            <input name="jw_streamer" type="text" id="must" value="<?php echo $inputs['jw_streamer']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Provider (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="RTMP or HTTP "></i></label>
+			        <div class="controls">
+			            <select name="jw_provider" class="span2">
+			                <option value=''></option>
+			                <option value="rtmp" <?php echo ($_POST['jw_provider'] == 'rtmp') ? 'selected="selected"' : '';?>>RTMP</option>
+			                <option value="http" <?php echo ($_POST['jw_provider'] == 'http') ? 'selected="selected"' : '';?>>HTTP</option>
+			            </select>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp">
+			        <label>Load Balancing (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.loadbalance</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance" value="true" <?php echo ($inputs['jw_rtmp_loadbalance'] == 'true') ? 'checked="checked"' : '';?> /> On</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance" value="" <?php echo ($inputs['jw_rtmp_loadbalance'] != 'true') ? 'checked="checked"' : '';?> /> Off</label>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp">
+			        <label>Subscribe (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code>rtmp.subscribe</code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe" value="true" <?php echo ($inputs['jw_rtmp_subscribe'] == 'true') ? 'checked="checked"' : '';?> /> Yes</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe" value="" <?php echo ($inputs['jw_rtmp_subscribe'] != 'true') ? 'checked="checked"' : '';?> /> No</label>
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <div class="control-group provider_http">
+			        <label>Startparam (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.startparam</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_startparam" value="<?php echo $inputs['jw_startparam'];?>" size="20" class="bigger span12" />
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp">
+			        <label>Secure Token (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Some service providers (e.g Wowza Media Server) have a feature called Secure Token that is used to protect your streams from downloading.<br />This <code>securetoken</code> parameter is optional and might not be compatible with all RTMP Service providers."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_securetoken" value="<?php echo $inputs['jw_securetoken'];?>" size="20" class="bigger span2" />
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			</div>
 
-        <div class="control-group">
-			<label class="control-label" for="addvideo_direct_input">File 2</label>
-			<div class="controls">
-				<input type="text" id="source2" name="source2" value="<?php echo $inputs['jw_file2']; ?>" class="bigger span12" /> 
+			<!-- Video Souce 2 -->
+			<div class="tab-pane" id="div_video_source2">
+			    <div class="control-group">
+			        <label>File 2<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
+			        <div class="controls" id="show-opt-vs1-show1">
+			            <input name="jw_file1" type="text" value="<?php echo $inputs['jw_file1']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Streamer <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Location of an RTMP or HTTP server instance to use for streaming."></i></label>
+			        <div class="controls" id="show-opt-vs2-show1">
+			            <input name="jw_streamer1" type="text" value="<?php echo $inputs['jw_streamer1']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Provider (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="RTMP or HTTP "></i></label>
+			        <div class="controls">
+			            <select name="jw_provider1" class="span2">
+			                <option value=''></option>
+			                <option value="rtmp" <?php echo ($_POST['jw_provider1'] == 'rtmp') ? 'selected="selected"' : '';?>>RTMP</option>
+			                <option value="http" <?php echo ($_POST['jw_provider1'] == 'http') ? 'selected="selected"' : '';?>>HTTP</option>
+			            </select>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp1">
+			        <label>Load Balancing (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.loadbalance</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance1" value="true" <?php echo ($inputs['jw_rtmp_loadbalance1'] == 'true') ? 'checked="checked"' : '';?> /> On</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance1" value="" <?php echo ($inputs['jw_rtmp_loadbalance1'] != 'true') ? 'checked="checked"' : '';?> /> Off</label>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp1">
+			        <label>Subscribe (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code>rtmp.subscribe</code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe1" value="true" <?php echo ($inputs['jw_rtmp_subscribe1'] == 'true') ? 'checked="checked"' : '';?> /> Yes</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe1" value="" <?php echo ($inputs['jw_rtmp_subscribe1'] != 'true') ? 'checked="checked"' : '';?> /> No</label>
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <div class="control-group provider_http1">
+			        <label>Startparam (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.startparam</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_startparam1" value="<?php echo $inputs['jw_startparam1'];?>" size="20" class="bigger span12" />
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp1">
+			        <label>Secure Token (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Some service providers (e.g Wowza Media Server) have a feature called Secure Token that is used to protect your streams from downloading.<br />This <code>securetoken</code> parameter is optional and might not be compatible with all RTMP Service providers."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_securetoken1" value="<?php echo $inputs['jw_securetoken1'];?>" size="20" class="bigger span2" />
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			</div>
+
+			<!-- Video Souce 3 -->
+			<div class="tab-pane" id="div_video_source3">
+			    <!-- <h4>Video Source 1</h4> -->
+			    <div class="control-group">
+			        <label>File 3<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Internal URL of video or audio file you want to stream.<br />This is the equivalent of JW Player's <code><i>file</i></code> flashvar. "></i></label>
+			        <div class="controls" id="show-opt-vs1-show2">
+			            <input name="jw_file2" type="text" value="<?php echo $inputs['jw_file2']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Streamer <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Location of an RTMP or HTTP server instance to use for streaming."></i></label>
+			        <div class="controls" id="show-opt-vs2-show2">
+			            <input name="jw_streamer2" type="text" value="<?php echo $inputs['jw_streamer2']; ?>" class="bigger span12" />
+			        </div>
+			    </div>
+			    <div class="control-group">
+			        <label>Provider (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="RTMP or HTTP "></i></label>
+			        <div class="controls">
+			            <select name="jw_provider2" class="span2">
+			                <option value=''></option>
+			                <option value="rtmp" <?php echo ($_POST['jw_provider2'] == 'rtmp') ? 'selected="selected"' : '';?>>RTMP</option>
+			                <option value="http" <?php echo ($_POST['jw_provider2'] == 'http') ? 'selected="selected"' : '';?>>HTTP</option>
+			            </select>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp2">
+			        <label>Load Balancing (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.loadbalance</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance3" value="true" <?php echo ($inputs['jw_rtmp_loadbalance3'] == 'true') ? 'checked="checked"' : '';?> /> On</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance3" value="" <?php echo ($inputs['jw_rtmp_loadbalance3'] != 'true') ? 'checked="checked"' : '';?> /> Off</label>
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp2">
+			        <label>Subscribe (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code>rtmp.subscribe</code> flashvar."></i></label>
+			        <div class="controls">
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe2" value="true" <?php echo ($inputs['jw_rtmp_subscribe2'] == 'true') ? 'checked="checked"' : '';?> /> Yes</label>
+			            <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe2" value="" <?php echo ($inputs['jw_rtmp_subscribe2'] != 'true') ? 'checked="checked"' : '';?> /> No</label>
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <div class="control-group provider_http2">
+			        <label>Startparam (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.startparam</i></code> flashvar."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_startparam2" value="<?php echo $inputs['jw_startparam2'];?>" size="20" class="bigger span12" />
+			        </div>
+			    </div>
+			    <!-- .provider_http -->
+			    <!-- .provider_rtmp -->
+			    <div class="control-group provider_rtmp2">
+			        <label>Secure Token (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Some service providers (e.g Wowza Media Server) have a feature called Secure Token that is used to protect your streams from downloading.<br />This <code>securetoken</code> parameter is optional and might not be compatible with all RTMP Service providers."></i></label>
+			        <div class="controls">
+			            <input type="text" name="jw_securetoken2" value="<?php echo $inputs['jw_securetoken2'];?>" size="20" class="bigger span2" />
+			        </div>
+			    </div>
+			    <!-- .provider_rtmp -->
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="source3">File 3</label>
-			<div class="controls">
-				<input type="text" id="source3" name="source3" value="<?php echo $inputs['jw_file3']; ?>" class="bigger span12" />
-			</div>
-		</div>
-
-        <div class="control-group">
-        <label>Streamer <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Location of an RTMP or HTTP server instance to use for streaming."></i></label>
-        <div class="controls" id="show-opt-vs2-show">
-        <input name="jw_streamer" type="text" id="must" value="<?php echo $inputs['jw_streamer']; ?>" class="bigger span12" />
-        </div>
-        </div>
-
-        <div class="control-group">
-        <label>Provider (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="RTMP or HTTP "></i></label>
-        <div class="controls">
-        <select name="jw_provider" class="span2">
-            <option value=''></option>
-            <option value="rtmp" <?php echo ($_POST['jw_provider'] == 'rtmp') ? 'selected="selected"' : '';?>>RTMP</option>
-            <option value="http" <?php echo ($_POST['jw_provider'] == 'http') ? 'selected="selected"' : '';?>>HTTP</option>
-        </select>
-        </div>
-        </div>
-
-        <!-- .provider_rtmp -->
-        <div class="control-group provider_rtmp">
-        <label>Load Balancing (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.loadbalance</i></code> flashvar."></i></label>
-        <div class="controls">
-        <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance" value="true" <?php echo ($inputs['jw_rtmp_loadbalance'] == 'true') ? 'checked="checked"' : '';?> /> On</label>
-        <label><input class="checkbox inline" type="radio" name="jw_rtmp_loadbalance" value="" <?php echo ($inputs['jw_rtmp_loadbalance'] != 'true') ? 'checked="checked"' : '';?> /> Off</label>
-        </div>
-        </div>
-        <!-- .provider_rtmp -->
-
-        <!-- .provider_rtmp -->
-        <div class="control-group provider_rtmp">
-        <label>Subscribe (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code>rtmp.subscribe</code> flashvar."></i></label>
-        <div class="controls">
-        <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe" value="true" <?php echo ($inputs['jw_rtmp_subscribe'] == 'true') ? 'checked="checked"' : '';?> /> Yes</label>
-        <label><input class="checkbox inline" type="radio" name="jw_rtmp_subscribe" value="" <?php echo ($inputs['jw_rtmp_subscribe'] != 'true') ? 'checked="checked"' : '';?> /> No</label>
-        </div>
-        </div>
-        <!-- .provider_http -->
-        <div class="control-group provider_http">
-        <label>Startparam (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="This is the equivalent of JW Player's <code><i>rtmp.startparam</i></code> flashvar."></i></label>
-        <div class="controls">
-        <input type="text" name="jw_startparam" value="<?php echo $inputs['jw_startparam'];?>" size="20" class="bigger span12" />
-        </div>
-        </div>
-        <!-- .provider_http -->
-		
-		<!-- .provider_rtmp -->
-        <div class="control-group provider_rtmp">
-        <label>Secure Token (<small>optional</small>) <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="" data-content="Some service providers (e.g Wowza Media Server) have a feature called Secure Token that is used to protect your streams from downloading.<br />This <code>securetoken</code> parameter is optional and might not be compatible with all RTMP Service providers."></i></label>
-        <div class="controls">
-        <input type="text" name="jw_securetoken" value="<?php echo $inputs['jw_securetoken'];?>" size="20" class="bigger span2" />
-        </div>
-        </div>
-        <!-- .provider_rtmp -->
-
-        </div><!-- .widget -->
-
+	</div>
 		<div class="widget border-radius4 shadow-div" id="custom-fields">
 		
 		<h4>Custom Fields <a href="http://help.phpmelody.com/how-to-use-the-custom-fields/" target="_blank"><i class="icon-question-sign"></i></a></h4>
@@ -555,6 +712,19 @@ if ($_POST['submit'] != '')
             </div>
             </div>
 			
+			<div class="control-group">
+            	<label><b>Select Video Type</b></label>
+            	<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="0" checked>Movie</label>
+				<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="1">TV Series</label>
+            </div>
+
+            <div class="control-group">
+	            <label>Recommended: <span id="value-recommended"><strong><?php echo ($video_details['recommended'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-recommended">Edit</a></label>
+	            <div class="controls" id="show-opt-recommended">
+	                <label><input type="checkbox" name="recommended" id="recommended" value="1" <?php if($video_details['recommended'] == 1) echo 'checked="checked"';?> /> Yes, mark as recommended</label>
+	            </div>
+            </div>
+
             <div class="control-group">
             <label>Featured: <span id="value-featured"><strong><?php echo ($inputs['featured'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-featured">Edit</a></label>
             <div class="controls" id="show-opt-featured">

@@ -120,66 +120,71 @@ if($_POST['submit'] != '')
 	$input['source_id']		= 	(int) $_POST['source_id'];
 	$input['allow_embedding'] = (int) $_POST['allow_embedding'];
 	
-	
-	if (strlen($input['embed_code']) > 0)
-	{
-		$input['embed_code'] = $_POST['embed_code'];
-		if (ini_get('magic_quotes_gpc') == 1)
-		{
-			$input['embed_code'] = stripslashes($input['embed_code']);
+	for($i=0;$i<3;$i++) {
+		$key = "embed_code";
+		if($i>0) {
+			$key .= $i;
 		}
-		
-		$input['embed_code'] = str_replace(array("'", "\n", "\r"), array('"', '', ''), $input['embed_code']);
-		
-		//	remove extra html tags
-		$input['embed_code'] = strip_tags($input['embed_code'], '<iframe><embed><object><param><video><script><div>');
-		
-		//	remove left-overs
-		if (strpos($input['embed_code'], '<object') !== false)
+		if (strlen($input[$key]) > 0)
 		{
-			$input['embed_code'] = preg_replace('/\/object>(.*)/i', '/object>', $input['embed_code']);
-		}
-
-		//	replace width, height and wmode values with variables
-		$input['embed_code'] = preg_replace('/width="([0-9]+)"/i', 'width="%%player_w%%"', $input['embed_code']);
-		$input['embed_code'] = preg_replace('/height="([0-9]+)"/i', 'height="%%player_h%%"', $input['embed_code']);
-		$input['embed_code'] = preg_replace('/value="(window|opaque|transparent)"/i', 'value="%%player_wmode%%"', $input['embed_code']);
-		$input['embed_code'] = preg_replace('/wmode="(.*?)"/i', 'wmode="%%player_wmode%%"', $input['embed_code']);
-		$input['embed_code'] = preg_replace('/width=([0-9]+)/i', 'width=%%player_w%%', $input['embed_code']);
-		$input['embed_code'] = preg_replace('/height=([0-9]+)/i', 'height=%%player_h%%', $input['embed_code']);
-		
-		$input['embed_code'] = secure_sql($input['embed_code']);
-		
-		if ($input['source_id'] > 0)
-			$input['source_id'] = 0;
-	}
-	else if ($input['source_id'] == 0 && array_key_exists('embed_code', $_POST) && strlen($input['embed_code']) == 0 && strlen($input['jw_file']) == 0)
-	{
-		if (strlen($input['url_flv']) > 0)
-		{
-			$allowed_ext = array('.flv', '.mp4', '.mov', '.wmv', '.divx', '.avi', '.mkv', 
-								'.asf', '.wma', '.mp3', '.m4v', '.m4a', '.3gp', '.3g2');
-			$last_4_chars = substr($input['url_flv'], strlen($input['url_flv'])-4, strlen($input['url_flv']));
-			
-			if(in_array($last_4_chars, $allowed_ext) && (preg_match('/photobucket\.com/', $input['url_flv']) == 0))
+			$input[$key] = $_POST[$key];
+			if (ini_get('magic_quotes_gpc') == 1)
 			{
-				if(strpos($input['url_flv'], _URL) !== false)
+				$input[$key] = stripslashes($input[$key]);
+			}
+			
+			$input[$key] = str_replace(array("'", "\n", "\r"), array('"', '', ''), $input[$key]);
+			
+			//	remove extra html tags
+			$input[$key] = strip_tags($input[$key], '<iframe><embed><object><param><video><script><div>');
+			
+			//	remove left-overs
+			if (strpos($input[$key], '<object') !== false)
+			{
+				$input[$key] = preg_replace('/\/object>(.*)/i', '/object>', $input[$key]);
+			}
+
+			//	replace width, height and wmode values with variables
+			$input[$key] = preg_replace('/width="([0-9]+)"/i', 'width="%%player_w%%"', $input[$key]);
+			$input[$key] = preg_replace('/height="([0-9]+)"/i', 'height="%%player_h%%"', $input[$key]);
+			$input[$key] = preg_replace('/value="(window|opaque|transparent)"/i', 'value="%%player_wmode%%"', $input[$key]);
+			$input[$key] = preg_replace('/wmode="(.*?)"/i', 'wmode="%%player_wmode%%"', $input[$key]);
+			$input[$key] = preg_replace('/width=([0-9]+)/i', 'width=%%player_w%%', $input[$key]);
+			$input[$key] = preg_replace('/height=([0-9]+)/i', 'height=%%player_h%%', $input[$key]);
+			
+			$input[$key] = secure_sql($input[$key]);
+			
+			if ($input['source_id'] > 0)
+				$input['source_id'] = 0;
+		}
+		else if ($input['source_id'] == 0 && array_key_exists($key, $_POST) && strlen($input[$key]) == 0 && strlen($input['jw_file']) == 0)
+		{
+			if (strlen($input['url_flv']) > 0)
+			{
+				$allowed_ext = array('.flv', '.mp4', '.mov', '.wmv', '.divx', '.avi', '.mkv', 
+									'.asf', '.wma', '.mp3', '.m4v', '.m4a', '.3gp', '.3g2');
+				$last_4_chars = substr($input['url_flv'], strlen($input['url_flv'])-4, strlen($input['url_flv']));
+				
+				if(in_array($last_4_chars, $allowed_ext) && (preg_match('/photobucket\.com/', $input['url_flv']) == 0))
 				{
-					$input['source_id'] = 1;
-				}
-				else
-				{
-					$input['source_id'] = 2;
+					if(strpos($input['url_flv'], _URL) !== false)
+					{
+						$input['source_id'] = 1;
+					}
+					else
+					{
+						$input['source_id'] = 2;
+					}
 				}
 			}
+			else
+			{
+				$input['source_id'] = 1234;
+			}
+			
+			$sql = "DELETE FROM pm_embed_code WHERE uniq_id = '". $_POST['uniq_id'] ."'";
+			mysql_query($sql);
 		}
-		else
-		{
-			$input['source_id'] = 1234;
-		}
-		
-		$sql = "DELETE FROM pm_embed_code WHERE uniq_id = '". $_POST['uniq_id'] ."'";
-		mysql_query($sql);
 	}
 
 	if($description != '')
@@ -290,6 +295,10 @@ if($_POST['submit'] != '')
 				category= '". $categories ."', 
 				description = '". $description ."',
 				language = '". $input['language'] ."',
+				country_id = '".$input['country_id']."',
+				video_year = '".$input['video_year']."',
+				video_type = '".$input['video_type']."',
+				recommended = '".$input['recommended']."',
 				video_slug = '". $input['video_slug'] ."'";
 
 	// update site_views only if the input value has changed
@@ -398,7 +407,7 @@ if($_POST['submit'] != '')
 			$sql .= ", url_flv = '". $temp['url_flv'] ."'";
 			$sql .= ", source_id = '". $input['source_id'] ."'";
 			$sql .= ", status = '0'";
-
+			print_r($_POST);exit();
 			if(empty($input['direct-original']))
 			{
 				$sql2 = "INSERT INTO pm_videos_urls (uniq_id, direct) VALUES ('".$_POST['uniq_id']."', '". $input['direct'] ."')";
@@ -406,7 +415,7 @@ if($_POST['submit'] != '')
 			}
 			else
 			{
-				$sql2 = "UPDATE pm_videos_urls SET direct='".$input['direct']."' WHERE uniq_id='". $_POST['uniq_id'] ."'";
+				$sql2 = "UPDATE pm_videos_urls SET direct='".$input['direct']."', alt_direct1='".$input['direct1']."', alt_direct2='".$input['direct2']."' WHERE uniq_id='". $_POST['uniq_id'] ."'";
 				$result = mysql_query($sql2);			
 			}
 			unset($temp, $sql2);
@@ -482,7 +491,7 @@ if($_POST['submit'] != '')
 			if ($input['source_id'] == 1 || $input['source_id'] == 2)
 			{
 				$sql_2 = "UPDATE pm_videos_urls 
-						  SET direct = '". $input['url_flv'] ."'
+						  SET direct = '". $input['url_flv'] ."', alt_direct1='".$input['direct1']."', alt_direct2='".$input['direct2']."'
 						  WHERE uniq_id = '". $input['uniq_id'] ."'";
 				@mysql_query($sql_2);
 			}
@@ -577,7 +586,7 @@ if($_POST['submit'] != '')
 			}
 			else
 			{
-				$sql2 = "UPDATE pm_videos_urls SET direct='".$input['direct']."' WHERE uniq_id='". $input['uniq_id'] ."'";
+				$sql2 = "UPDATE pm_videos_urls SET direct='".$input['direct']."', alt_direct1='".$input['direct1']."', alt_direct2='".$input['direct2']."' WHERE uniq_id='". $input['uniq_id'] ."'";
 				$result = mysql_query($sql2);			
 			}
 			unset($temp, $sql2);
@@ -709,7 +718,7 @@ if($_POST['submit'] != '')
 		{
 			if (count_entries('pm_embed_code', 'uniq_id', $_POST['uniq_id']) > 0)
 			{
-				$sql = "UPDATE pm_embed_code SET embed_code = '". $input['embed_code'] ."' WHERE uniq_id = '". $_POST['uniq_id'] ."'";
+				$sql = "UPDATE pm_embed_code SET embed_code = '". $input['embed_code'] ."',embed_code1 = '". $input['embed_code1'] ."',embed_code2 = '". $input['embed_code2'] ."' WHERE uniq_id = '". $_POST['uniq_id'] ."'";
 			}
 			else
 			{
@@ -789,7 +798,7 @@ if ($count == 0)
 if ($type == 'video')
 {
 	$r = mysql_fetch_assoc($query);
-	$query2 = mysql_query("SELECT mp4, direct FROM pm_videos_urls WHERE uniq_id = '".$uniq_id."'");
+	$query2 = mysql_query("SELECT mp4, direct, alt_direct1, alt_direct2 FROM pm_videos_urls WHERE uniq_id = '".$uniq_id."'");
 	$r_extent = mysql_fetch_assoc($query2);
 
 	mysql_free_result($query);
@@ -1165,40 +1174,47 @@ if($r['added'] > time())
 ?>
 <script type="text/javascript">
 	$(document).ready(function(){
-		switch ($('select[name="jw_provider"]').val())
-		{
-			default:
-			case '':
-				$('.provider_http').hide();
-				$('.provider_rtmp').hide();
-			break;
-			case 'rtmp':
-				$('.provider_http').hide();
-			break;
-			case 'http':
-				$('.provider_rtmp').hide();
-			break;
-			
-		}
-		
-		$('select[name="jw_provider"]').change(function(){
-			switch(($(this).val()))
+		<?php for($index=0;$index<3;$index++) {
+			$op="";
+			if($index > 1) {
+				$op = $index;
+			}
+		?>
+			switch ($('select[name="jw_provider<?=$op;?>"]').val())
 			{
 				default:
 				case '':
-					$('.provider_http').fadeOut('fast');
-					$('.provider_rtmp').fadeOut('fast');
+					$('.provider_http<?=$op;?>').hide();
+					$('.provider_rtmp<?=$op;?>').hide();
 				break;
 				case 'rtmp':
-					$('.provider_http').hide();
-					$('.provider_rtmp').fadeIn('slow');
+					$('.provider_http<?=$op;?>').hide();
 				break;
 				case 'http':
-					$('.provider_rtmp').hide();
-					$('.provider_http').fadeIn('slow');
+					$('.provider_rtmp<?=$op;?>').hide();
 				break;
+				
 			}
-		});
+			
+			$('select[name="jw_provider<?=$op;?>"]').change(function(){
+				switch(($(this).val()))
+				{
+					default:
+					case '':
+						$('.provider_http<?=$op;?>').fadeOut('fast');
+						$('.provider_rtmp<?=$op;?>').fadeOut('fast');
+					break;
+					case 'rtmp':
+						$('.provider_http<?=$op;?>').hide();
+						$('.provider_rtmp<?=$op;?>').fadeIn('slow');
+					break;
+					case 'http':
+						$('.provider_rtmp<?=$op;?>').hide();
+						$('.provider_http<?=$op;?>').fadeIn('slow');
+					break;
+				}
+			});
+		<?php } ?>
 	});
 </script>
 
@@ -1240,27 +1256,73 @@ if($r['added'] > time())
 	<span class="autosave-message"></span>
 	</div>
 	
+	<div class="control-group">
+    	<div class="row-fluid">
+    	<div class="span6">
+			<label>Country</label>
+			<?php $countries = list_countries();?>
+			<select name="country_id" id="country_id">
+				<option value="">Select Country</option>
+				<?php foreach ($countries as $key => $country) : ?>
+					<option value="<?=$country['id'];?>" <?=$r['country_id']==$country['id'] ? "selected" : "";?>><?=$country['name'];?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="span6">
+			<label>Year</label>
+			<input type="text" name="video_year" id="video_year" value="<?=$r['video_year'];?>" />
+		</div>
+		</div>
+	</div>
+
 	</div>
 	<?php if($r['source_id'] == 0 || $r['source_id'] != 1 || $r['source_id'] != 2) : ?>    
-	<div class="widget border-radius4 shadow-div">
-	<h4>Embed Code <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Info" data-content="Add or edit the embed code ONLY if you wish to change this video's source. Once an embed code is given, PHP Melody will consider it to be the default video."></i></h4>
-	<div class="control-group">
-	<div class="controls">
-	<!-- 
-	<strong>Direct link to video page</strong><br /><small>Optional field</small>
-	<input type="text" name="direct" value="<?php echo $inputs['direct']; ?>" style="width: 500px;" />
-	-->
-	<textarea name="embed_code" rows="2" class="textarea-embed"><?php
-	$embed_code = $r['embed_code'];
-	$embed_code = str_replace('%%player_w%%', _PLAYER_W_EMBED, $embed_code);
-	$embed_code = str_replace('%%player_h%%', _PLAYER_H_EMBED, $embed_code);
-	
-	echo $embed_code;
-	?></textarea>
-	<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
-	</div>
-	</div>
-	</div>
+		<?php if (!is_array($r['jw_flashvars']) && empty($r['direct'])) : ?>
+		<div class="widget border-radius4 shadow-div">
+			<h4>Embed Code 1<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Info" data-content="Add or edit the embed code ONLY if you wish to change this video's source. Once an embed code is given, PHP Melody will consider it to be the default video."></i></h4>
+			<div class="control-group">
+				<div class="controls">
+					<textarea name="embed_code" rows="2" class="textarea-embed"><?php
+					$embed_code = $r['embed_code'];
+					$embed_code = str_replace('%%player_w%%', _PLAYER_W_EMBED, $embed_code);
+					$embed_code = str_replace('%%player_h%%', _PLAYER_H_EMBED, $embed_code);
+					echo $embed_code;
+					?></textarea>
+					<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="widget border-radius4 shadow-div">
+			<h4>Embed Code 2<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Info" data-content="Add or edit the embed code ONLY if you wish to change this video's source. Once an embed code is given, PHP Melody will consider it to be the default video."></i></h4>
+			<div class="control-group">
+				<div class="controls">
+					<textarea name="embed_code1" rows="2" class="textarea-embed"><?php
+					$embed_code = $r['embed_code1'];
+					$embed_code = str_replace('%%player_w%%', _PLAYER_W_EMBED, $embed_code);
+					$embed_code = str_replace('%%player_h%%', _PLAYER_H_EMBED, $embed_code);
+					echo $embed_code;
+					?></textarea>
+					<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="widget border-radius4 shadow-div">
+			<h4>Embed Code 3<i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Info" data-content="Add or edit the embed code ONLY if you wish to change this video's source. Once an embed code is given, PHP Melody will consider it to be the default video."></i></h4>
+			<div class="control-group">
+				<div class="controls">
+					<textarea name="embed_code2" rows="2" class="textarea-embed"><?php
+					$embed_code = $r['embed_code2'];
+					$embed_code = str_replace('%%player_w%%', _PLAYER_W_EMBED, $embed_code);
+					$embed_code = str_replace('%%player_h%%', _PLAYER_H_EMBED, $embed_code);
+					echo $embed_code;
+					?></textarea>
+					<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+				</div>
+			</div>
+		</div>
+		<?php endif; ?>
 	<?php endif; ?>
 	
 	<div class="widget border-radius4 shadow-div" id="custom-fields">
@@ -1475,6 +1537,19 @@ if($r['added'] > time())
 			</div>
 			
 			<div class="control-group">
+            	<label><b>Select Video Type</b></label>
+            	<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="0" <?=$r['video_type']==0 ? "checked" : "";?> />Movie</label>
+				<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="1" <?=$r['video_type']==1 ? "checked" : "";?> />TV Series</label>
+            </div>
+
+            <div class="control-group">
+	            <label>Recommended: <span id="value-recommended"><strong><?php echo ($r['recommended'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-recommended">Edit</a></label>
+	            <div class="controls" id="show-opt-recommended">
+	                <label><input type="checkbox" name="recommended" id="recommended" value="1" <?php if($r['recommended'] == 1) echo 'checked="checked"';?> /> Yes, mark as recommended</label>
+	            </div>
+            </div>
+
+			<div class="control-group">
 			<label>Featured: <span id="value-featured"><strong><?php echo ($r['featured'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-featured">Edit</a></label>
 			<div class="controls" id="show-opt-featured">
 				<label><input type="checkbox" name="featured" id="featured" value="1" <?php if($r['featured'] == 1) echo 'checked="checked"';?> /> Yes, mark as featured</label>
@@ -1515,7 +1590,7 @@ if($r['added'] > time())
   ?>
 		</div><!-- .widget -->
 
-		<?php if ($r['source_id'] != 1) : ?>
+		<?php if ($r['source_id'] != 1 && (is_array($r['jw_flashvars']) || !empty($r['url_flv']))) : ?>
 		<div class="widget border-radius4 shadow-div">
 		<h4>Video Source</h4>
 		<?php
@@ -1585,15 +1660,18 @@ if($r['added'] > time())
 		</div>
 		<!-- .provider_rtmp -->
 		<?php else: ?>
-		<?php if ($r['source_id'] != 1 && $r['source_id'] != 2) : ?>
+		<?php if ($r['source_id'] != 1 && $r['source_id'] != 2 && !empty($r['direct'])) : ?>
 		<div class="control-group">
 		<label>Original Video URL <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Warning" data-content="Changing this URL will re-import the video. All other data (title, tags, description, etc.) will remain the same."></i> <a href="#" id="show-vs1">Edit</a></label>
 		<div class="controls" id="show-opt-vs1">
 		<input type="text" name="direct" class="bigger span12" value="<?php echo $r['direct']; ?>" />
+		<input type="text" name="direct1" class="bigger span12" value="<?php echo $r['alt_direct1']; ?>" />
+	    <input type="text" name="direct2" class="bigger span12" value="<?php echo $r['alt_direct2']; ?>" />
 		<input type="hidden" name="direct-original" value="<?php echo $r['direct']; ?>" placeholder="http://"  />
 		</div>
 		</div>
 		<?php endif; ?>
+		<?php if(!empty($r['url_flv'])) : ?>
 		<div class="control-group">
 		<label>File Location <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Warning" data-content="Changing the FLV/MOV/WMV/MP4 location of this video may cause it to stop working!"></i> <a href="#" id="show-vs2">Edit</a></label>
 		<div class="controls" id="show-opt-vs2">
@@ -1601,6 +1679,7 @@ if($r['added'] > time())
 		<input type="hidden" name="url_flv-original" value="<?php echo $r['url_flv']; ?>" placeholder="http://" />
 		</div>
 		</div>
+		<?php endif; ?>
 		<?php endif; ?>
 		</div><!-- .widget -->
 		<?php endif; ?>

@@ -27,7 +27,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#tn-news" role="tab" data-toggle="tab">{$lang.top_m_videos}</a>
                     </li>
-                    <li><a href="#tn-notice" role="tab" data-toggle="tab">{$lang._categories}</a>
+                    <li><a href="#tn-notice" role="tab" data-toggle="tab">FAN PAGE</a>
                     </li>
                 </ul>
                 <div class="top-news-content">
@@ -53,7 +53,8 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tn-notice">
-                            <ul class="tn-news" style="overflow-y: scroll;">
+                            <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FVideoone-1764015350594475%2F&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=188010698357473" height="500" style="border:none;overflow:hidden; width:100%;" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                            <!-- <ul class="tn-news" style="overflow-y: scroll;">
                                 {foreach from=$categories key=k item=category_data}
                                 <li>
                                     <a href="{$category_data.url}" class="thumb news-thumb" style="background-image:url({$category_data.image_url});" alt="{$category_data.attr_alt}">
@@ -66,7 +67,7 @@
                                     <div class="clearfix"></div>
                                 </li>
                                 {/foreach}
-                            </ul>
+                            </ul> -->
                             <!-- <ul class="list-group">
                                 {dropdown_menu_video_categories max_levels=0}
                             </ul> -->
@@ -131,6 +132,7 @@
         
         <div class="widget recommend">
             <div class="widget-title">
+				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
                 <h2>{$lang.top_videos}</h2> 
                 <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
                 </div>
@@ -139,7 +141,7 @@
                 <div class="content" data-name="recommend">
                     <div class="row movie-list">
                     	{foreach from=$top_videos key=k item=video_data}
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8 col-xs-12">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                             	{if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
 						    	{if $video_data.mark_new}<div class="quality">{$lang._new}</div>{/if}
@@ -175,6 +177,7 @@
 
         <div class="widget recommend">
             <div class="widget-title">
+				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
                 <h2>{$lang.new_videos}</h2> 
                 <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
                 </div>
@@ -183,7 +186,7 @@
                 <div class="content" data-name="recommend">
                     <div class="row movie-list">
                         {foreach from=$new_videos key=k item=video_data}
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8 col-xs-12">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                                 {if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
                                 {if $video_data.mark_new}<div class="quality">{$lang._new}</div>{/if}
@@ -219,6 +222,7 @@
 
         <div class="widget recommend">
             <div class="widget-title">
+				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
                 <h2>FEATURED MOVIES</h2> 
                 <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
                 </div>
@@ -227,7 +231,7 @@
                 <div class="content" data-name="recommend">
                     <div class="row movie-list">
                         {foreach from=$featured_videos key=k item=video_data}
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8 col-xs-12">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                                 {if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
                                 {if $video_data.mark_new}<div class="quality">{$lang._new}</div>{/if}

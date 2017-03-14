@@ -189,44 +189,43 @@
 			</div>
 			<div class="search-toggler btn btn-gray"><i class="fa fa-search"></i>
 			</div>
-			{if $_custom_logo_url != ''}
-				<div class="logo-img">
-					<a href="{$smarty.const._URL}/index.{$smarty.const._FEXT}" rel="home"><img src="{$_custom_logo_url}" alt="{$smarty.const._SITENAME|escape}" title="{$smarty.const._SITENAME|escape}" border="0" /></a>
-				</div>
-			  {else}
-				<h3 class="logo-img"><a href="{$smarty.const._URL}/index.{$smarty.const._FEXT}" rel="home">{$smarty.const._SITENAME}</a></h3>
-			{/if}
-
+			<div id="logo">
+				<a href="{$smarty.const._URL}/index.{$smarty.const._FEXT}" rel="home"></a> 
+			</div>
 			<ul id="menu">
 				<li><a href="{$smarty.const._URL}/index.{$smarty.const._FEXT}">{$lang.homepage}</a></li>
 				<li class="has-children">
 				{if $smarty.const._SEOMOD}
-					<a href="{if $smarty.const.USER_DEVICE != 'mobile'}{$smarty.const._URL}/browse.{$smarty.const._FEXT}{else}#{/if}">{$lang.category} <b class="caret"></b></a>
+					<a href="{if $smarty.const.USER_DEVICE != 'mobile'}{$smarty.const._URL}/browse.{$smarty.const._FEXT}{else}#{/if}">Genres <b class="caret"></b></a>
 				{else}
-					<a href="{if $smarty.const.USER_DEVICE != 'mobile'}{$smarty.const._URL}/category.php{else}#{/if}">{$lang.category} <b class="caret"></b></a>
+					<a href="{if $smarty.const.USER_DEVICE != 'mobile'}{$smarty.const._URL}/category.php{else}#{/if}">Genres <b class="caret"></b></a>
 				{/if}
+					<ul class="sub-menu">
+						{dropdown_menu_video_categories max_levels=3}
+					</ul>
+				</li>
+
+				<li class="has-children"> <a>Country <b class="caret"></b></a> 
 					<ul class="sub-menu" style="height: 500px; overflow-y: scroll;">
-						<!-- {dropdown_menu_video_categories max_levels=3} -->
 						{foreach from=$countries key=k item=country}
-						<li><a href>{$country.name}</a></li>
+						<li><a href="country.php?id={$country.id}">{$country.name}</a></li>
 						{/foreach}
 					</ul>
 				</li>
 
-				{if $smarty.const._MOD_ARTICLE == 1}
-					<li class="has-children">
-						<a>{$lang.articles} <b class="caret"></b></a>
-						<ul class="sub-menu">
-							{dropdown_menu_article_categories max_levels=3}
-						</ul>
-					</li>
-				{/if}
-				<li><a href="{$smarty.const._URL}/topvideos.{$smarty.const._FEXT}">{$lang.top_videos}</a></li>
-				<li><a href="{$smarty.const._URL}/newvideos.{$smarty.const._FEXT}">{$lang.new_videos}</a></li>
-				<li><a href="{$smarty.const._URL}/randomizer.php" rel="nofollow">{$lang.random_video}</a></li>
+				<li> <a title="Movies" href="videotype.php?type=0">Movies</a> 
+				</li>
+				<li> <a title="Movies" href="videotype.php?type=1">TV - Series</a> 
+				</li>
+				<li> <a title="Movies" href="topimdb.php">TOP IMDB</a> 
+				</li>
+				<li> <a title="Movies" href="javascript:;/movies">A-Z List</a> 
+				</li>
+				<li> <a title="Request" href="javascript:;/movies">Request</a> 
+				</li>
+				
 				
 				{if isset($mm_menu_always_inject1)}{$mm_menu_always_inject1}{/if}		
-				<li><a href="{$smarty.const._URL}/contact_us.{$smarty.const._FEXT}">{$lang.contact_us}</a></li>
 				{if isset($mm_menu_always_inject2)}{$mm_menu_always_inject2}{/if}	
 				{if $logged_in != 1 && isset($mm_menu_notlogged_inject)}{$mm_menu_notlogged_inject}{/if}
 				

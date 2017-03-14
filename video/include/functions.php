@@ -146,6 +146,21 @@ function list_countries() {
 	return $countries;
 }
 
+function getCountryNameById($id) {
+	$sql = "SELECT country FROM pm_videos_countries WHERE countryid='$id'";
+	$country = "Countries";
+	$result = mysql_query($sql);
+	if ( ! $result)
+	{
+		return $country;
+	}
+
+	while ($row = mysql_fetch_assoc($result)) {
+		$country = $row["country"];
+	}
+	return $country;
+}
+
 function load_categories($args = array())
 {
 	global $_video_categories, $_article_categories;
@@ -6242,8 +6257,8 @@ function insert_new_video($video_details, &$insert_id) // moved from /admin/func
 	{
 		$video_details['submitted_user_id'] = username_to_id($video_details['submitted']);
 	}
-
-	$sql = "INSERT INTO pm_videos (uniq_id, video_title, description, yt_id, yt_length, yt_thumb, category, submitted_user_id, submitted, added, url_flv, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, country_id, video_year, video_type, recommended, video_slug)
+	//print_r($video_details);exit();
+	$sql = "INSERT INTO pm_videos (uniq_id, video_title, description, yt_id, yt_length, yt_thumb, category, submitted_user_id, submitted, added, url_flv, url_flv1, url_flv2, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, country_id, video_year, video_type, recommended, video_slug)
 			VALUES ('". $video_details['uniq_id'] ."', 
 					'". secure_sql($video_details['video_title']) ."', 
 					'". secure_sql($video_details['description']) ."', 
@@ -6255,6 +6270,8 @@ function insert_new_video($video_details, &$insert_id) // moved from /admin/func
 					'". $video_details['submitted'] ."', 
 					'". $video_details['added'] ."', 
 					'". $video_details['url_flv'] ."', 
+					'". $video_details['url_flv1'] ."', 
+					'". $video_details['url_flv2'] ."', 
 					'". (int) $video_details['source_id'] ."', 
 					'". (int) $video_details['language'] ."', 
 					'". (int) $video_details['age_verification'] ."', 
@@ -6296,19 +6313,21 @@ function insert_new_video($video_details, &$insert_id) // moved from /admin/func
 	}
 	
 	$sql = "INSERT INTO pm_videos_urls (uniq_id, mp4, direct, alt_direct1, alt_direct2) VALUES 
-			('".$video_details['uniq_id']."', '".$video_details['mp4']."', '".$video_details['direct']."', '".$video_details['source2']."', '".$video_details['source3']."')";
+			('".$video_details['uniq_id']."', '".$video_details['mp4']."', '".$video_details['direct']."', '".$video_details['direct1']."', '".$video_details['direct2']."')";
 	$result = mysql_query($sql);
 
 	if (strlen($video_details['embed_code']) > 0)
 	{
-		$sql = "INSERT INTO pm_embed_code (uniq_id, embed_code) VALUES ('".$video_details['uniq_id']."', '".$video_details['embed_code']."')";
+		$sql = "INSERT INTO pm_embed_code (uniq_id, embed_code, embed_code1, embed_code2) VALUES ('".$video_details['uniq_id']."', '".$video_details['embed_code']."', '".$video_details['embed_code1']."', '".$video_details['embed_code2']."')";
 		$result = mysql_query($sql);
 	}
 	
 	if (is_array($video_details['jw_flashvars']))
 	{
 		$jw_flashvars = serialize($video_details['jw_flashvars']);
-		$sql = "INSERT INTO pm_embed_code (uniq_id, embed_code) VALUES ('".$video_details['uniq_id']."', '".secure_sql($jw_flashvars)."')";
+		$jw_flashvars1 = is_array($video_details['jw_flashvars1']) ? serialize($video_details['jw_flashvars1']) : '';
+		$jw_flashvars2 = is_array($video_details['jw_flashvars2']) ? serialize($video_details['jw_flashvars2']) : '';
+		$sql = "INSERT INTO pm_embed_code (uniq_id, embed_code, embed_code1, embed_code2) VALUES ('".$video_details['uniq_id']."', '".secure_sql($jw_flashvars)."', '".secure_sql($jw_flashvars1)."', '".secure_sql($jw_flashvars2)."')";
 		$result = mysql_query($sql);
 	}
 	

@@ -106,6 +106,8 @@ if ($_POST['submit'] != '')
 		$video_details['category'] 	  = (is_array($_POST['category'])) ? implode(',', $_POST['category']) : $_POST['category'];
 		$video_details['tags'] 		  = $_POST['tags'];
 		$video_details['embed_code']  = $_POST['embed_code'];
+		$video_details['embed_code1']  = $_POST['embed_code1'];
+		$video_details['embed_code2']  = $_POST['embed_code2'];
 		$video_details['direct']	  = $_POST['direct'];
 		$video_details['restricted']  = (int) $_POST['restricted'];
 		$video_details['yt_length']	  = ((int) $_POST['yt_min'] * 60) + (int) $_POST['yt_sec'];
@@ -123,27 +125,38 @@ if ($_POST['submit'] != '')
 			$video_details['added'] = pm_mktime($added);
 		}
 		
-		$video_details['embed_code'] = str_replace(array("'", "\n", "\r"), array('"', '', ''), $video_details['embed_code']);
-		
-		//	remove extra html tags
-		$video_details['embed_code'] = strip_tags($video_details['embed_code'], '<iframe><embed><object><param><video><script><div>');
-		
-		//	remove left-overs
-		if (strpos($video_details['embed_code'], '<object') !== false)
-		{
-			$video_details['embed_code'] = preg_replace('/\/object>(.*)/i', '/object>', $video_details['embed_code']);
-		}
+		for($i=0;$i<3;$i++) {
+			$key = "embed_code";
+			if($i>0) {
+				$key .= $i;
+			}
+			$video_details[$key] = str_replace(array("'", "\n", "\r"), array('"', '', ''), $video_details[$key]);
+			
+			//	remove extra html tags
+			$video_details[$key] = strip_tags($video_details[$key], '<iframe><embed><object><param><video><script><div>');
+			
+			//	remove left-overs
+			if (strpos($video_details[$key], '<object') !== false)
+			{
+				$video_details[$key] = preg_replace('/\/object>(.*)/i', '/object>', $video_details[$key]);
+			}
 
-		//	replace width, height and wmode values with variables
-		$video_details['embed_code'] = preg_replace('/width="([0-9]+)"/i', 'width="%%player_w%%"', $video_details['embed_code']);
-		$video_details['embed_code'] = preg_replace('/height="([0-9]+)"/i', 'height="%%player_h%%"', $video_details['embed_code']);
-		$video_details['embed_code'] = preg_replace('/value="(window|opaque|transparent)"/i', 'value="%%player_wmode%%"', $video_details['embed_code']);
-		$video_details['embed_code'] = preg_replace('/wmode="(.*?)"/i', 'wmode="%%player_wmode%%"', $video_details['embed_code']);
-		$video_details['embed_code'] = preg_replace('/width=([0-9]+)/i', 'width=%%player_w%%', $video_details['embed_code']);
-		$video_details['embed_code'] = preg_replace('/height=([0-9]+)/i', 'height=%%player_h%%', $video_details['embed_code']);
+			//	replace width, height and wmode values with variables
+			$video_details[$key] = preg_replace('/width="([0-9]+)"/i', 'width="%%player_w%%"', $video_details[$key]);
+			$video_details[$key] = preg_replace('/height="([0-9]+)"/i', 'height="%%player_h%%"', $video_details[$key]);
+			$video_details[$key] = preg_replace('/value="(window|opaque|transparent)"/i', 'value="%%player_wmode%%"', $video_details[$key]);
+			$video_details[$key] = preg_replace('/wmode="(.*?)"/i', 'wmode="%%player_wmode%%"', $video_details[$key]);
+			$video_details[$key] = preg_replace('/width=([0-9]+)/i', 'width=%%player_w%%', $video_details[$key]);
+			$video_details[$key] = preg_replace('/height=([0-9]+)/i', 'height=%%player_h%%', $video_details[$key]);
+			
+			$video_details[$key] = secure_sql($video_details[$key]);
+		}
 		
-		$video_details['embed_code'] = secure_sql($video_details['embed_code']);
-		
+		$video_details['country_id'] = isset($_POST['country_id']) && !empty($_POST['country_id']) ? ($_POST['country_id']) : 0;
+		$video_details['video_year'] = isset($_POST['video_year']) && !empty($_POST['video_year']) ? ($_POST['video_year']) : 0;
+		$video_details['video_type'] = isset($_POST['video_type']) && !empty($_POST['video_type']) ? ($_POST['video_type']) : 0;
+		$video_details['recommended'] = isset($_POST['recommended']) && !empty($_POST['recommended']) ? ($_POST['recommended']) : 0;
+
 		$uniq_id = generate_video_uniq_id();
 		
 		$video_details['uniq_id'] = $uniq_id;
@@ -330,20 +343,50 @@ if ($_POST['submit'] != '')
 	<span class="upload-file-dropzone"></span>
 	<span class="autosave-message"></span>
     </div>
+
+    <div class="control-group">
+    	<div class="row-fluid">
+    	<div class="span6">
+			<label>Country</label>
+			<?php $countries = list_countries();?>
+			<select name="country_id" id="country_id">
+				<option value="">Select Country</option>
+				<?php foreach ($countries as $key => $country) : ?>
+					<option value="<?=$country['id'];?>"><?=$country['name'];?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="span6">
+			<label>Year</label>
+			<input type="text" name="video_year" id="video_year" />
+		</div>
+		</div>
+	</div>
+
     </div>
 
 	<div class="widget border-radius4 shadow-div">
-	<h4>Embed Code</h4>
-    <div class="control-group">
-    <div class="controls">
-    <!-- 
-    <strong>Direct link to video page</strong><br /><small>Optional field</small>
-    <input type="text" name="direct" value="<?php echo $inputs['direct']; ?>" style="width: 500px;" />
-    -->
-    <textarea name="embed_code" id="must" rows="2" class="textarea-embed"><?php echo $inputs['embed_code']; ?></textarea>
-    <span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
-	</div>
-    </div>
+		<h4>Embed Code 1</h4>
+	    <div class="control-group">
+		    <div class="controls">
+		    	<textarea name="embed_code" id="must" rows="2" class="textarea-embed"><?php echo $inputs['embed_code']; ?></textarea>
+		    	<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+			</div>
+	    </div>
+	    <h4>Embed Code 2</h4>
+	    <div class="control-group">
+		    <div class="controls">
+		    	<textarea name="embed_code1" rows="2" class="textarea-embed"><?php echo $inputs['embed_code']; ?></textarea>
+		    	<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+			</div>
+	    </div>
+	    <h4>Embed Code 3</h4>
+	    <div class="control-group">
+		    <div class="controls">
+		    	<textarea name="embed_code2" rows="2" class="textarea-embed"><?php echo $inputs['embed_code']; ?></textarea>
+		    	<span class="help-block">Accepted HTML tags: <strong>&lt;iframe&gt;</strong>  <strong>&lt;embed&gt;</strong> <strong>&lt;object&gt;</strong> <strong>&lt;param&gt;</strong> <strong>&lt;video&gt;</strong> and <strong>&lt;script&gt;</strong></span>
+			</div>
+	    </div>
 	</div>
 	
 	<div class="widget border-radius4 shadow-div" id="custom-fields">
@@ -490,6 +533,19 @@ if ($_POST['submit'] != '')
             </div>
             </div>
 			
+			<div class="control-group">
+            	<label><b>Select Video Type</b></label>
+            	<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="0" checked>Movie</label>
+				<label class="radio-inline"><input type="radio" name="video_type" id="video_type" value="1">TV Series</label>
+            </div>
+
+            <div class="control-group">
+	            <label>Recommended: <span id="value-recommended"><strong><?php echo ($inputs['recommended'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-recommended">Edit</a></label>
+	            <div class="controls" id="show-opt-recommended">
+	                <label><input type="checkbox" name="recommended" id="recommended" value="1" <?php if($inputs['recommended'] == 1) echo 'checked="checked"';?> /> Yes, mark as recommended</label>
+	            </div>
+            </div>
+
             <div class="control-group">
             <label>Featured: <span id="value-featured"><strong><?php echo ($inputs['featured'] == 1) ? 'yes' : 'no';?></strong></span> <a href="#" id="show-featured">Edit</a></label>
             <div class="controls" id="show-opt-featured">

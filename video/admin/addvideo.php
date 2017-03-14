@@ -125,6 +125,7 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 			<label>Country</label>
 			<?php $countries = list_countries();?>
 			<select name="country_id" id="country_id">
+				<option value="">Select Country</option>
 				<?php foreach ($countries as $key => $country) : ?>
 					<option value="<?=$country['id'];?>"><?=$country['name'];?></option>
 				<?php endforeach;?>
@@ -373,8 +374,8 @@ if(isset($_GET['filename']) && $_GET['filename'] != '')
 	    <label>Original Video URL <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Warning" data-content="Changing this URL will re-import the video. All other data (title, tags, description, etc.) will remain the same."></i> <a href="#" id="show-vs1">Edit</a></label>
 	    <div class="controls" id="show-opt-vs1">
 	    <input type="text" name="direct" class="bigger span12" value="<?php echo $video_details['direct']; ?>" />
-	    <input type="text" name="source2" class="bigger span12" value="<?php echo $video_details['source2']; ?>" />
-	    <input type="text" name="source3" class="bigger span12" value="<?php echo $video_details['source3']; ?>" />
+	    <input type="text" name="direct1" class="bigger span12" value="<?php echo $video_details['direct1']; ?>" />
+	    <input type="text" name="direct2" class="bigger span12" value="<?php echo $video_details['direct2']; ?>" />
 	    <input type="hidden" name="direct-original" value="<?php echo $video_details['direct']; ?>" placeholder="http://"  />
 	    </div>
 	    </div>
@@ -552,15 +553,15 @@ function checkFields(Form) {
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="source2">Video Source 2</label>
+			<label class="control-label" for="direct1">Video Source 2</label>
 			<div class="controls">
-				<input type="text" id="source2" name="source2" size="30" class="span5" placeholder="http://">
+				<input type="text" id="direct1" name="direct1" size="30" class="span5" placeholder="http://">
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="source3">Video Source 3</label>
+			<label class="control-label" for="direct2">Video Source 3</label>
 			<div class="controls">
-				<input type="text" id="source3" name="source3" size="30" class="span5" placeholder="http://">
+				<input type="text" id="direct2" name="direct2" size="30" class="span5" placeholder="http://">
 				<button type="submit" id="addvideo_direct_submit" name="Submit" class="btn">Step 2 &raquo;</button>  <strong><small><a href="#" id="show-help-link-assist">Need help?</a></small></strong>
 			</div>
 		</div>
@@ -589,12 +590,12 @@ function checkFields(Form) {
 				$url = (isset($_POST['url'])) ? trim($_POST['url']) : trim($_GET['url']);
 
 			// Alternate video sources
-			if(isset($_POST["source2"]) && !empty($_POST["source2"])) {
-				$url2 = $_POST["source2"];
+			if(isset($_POST["direct1"]) && !empty($_POST["direct1"])) {
+				$url1 = $_POST["direct1"];
 			}
 
-			if(isset($_POST["source3"]) && !empty($_POST["source3"])) {
-				$url3 = $_POST["source3"];
+			if(isset($_POST["direct2"]) && !empty($_POST["direct2"])) {
+				$url2 = $_POST["direct2"];
 			}
 			// Alternate video sources ends
 			
@@ -619,9 +620,13 @@ function checkFields(Form) {
 			$temp = '';
 			
 			$url = expand_common_short_urls($url);
-			$video_details["source2"] = expand_common_short_urls($url2);
-			$video_details["source3"] = expand_common_short_urls($url3);
+			$url1 = expand_common_short_urls($url1);
+			$url2 = expand_common_short_urls($url2);
 
+			$video_details['url_flv1'] = $url1;
+			$video_details['url_flv2'] = $url2;
+			$video_details['direct1'] = $url1;
+			$video_details['direct2'] = $url2;
 			//	Is this a direct link to a video file?
 			if (strpos($url, '?') !== false)
 			{
@@ -752,6 +757,11 @@ function checkFields(Form) {
 					$video_details['source_id'] = 2;
 					$video_details['url_flv'] = $url;
 					$video_details['direct'] = $url;
+
+					$video_details['url_flv1'] = $url1;
+					$video_details['url_flv2'] = $url2;
+					$video_details['direct1'] = $url1;
+					$video_details['direct2'] = $url2;
 				break;
 				case 3:		//	flv hosted locally or just uploaded
 				
@@ -1034,8 +1044,10 @@ function checkFields(Form) {
 				}
 				else	//	Everything is good. Now we can add the new video to the database
 				{
-					$video_details['source2'] = isset($_POST['source2']) && !empty($_POST['source2']) ? ($_POST['source2']) : '';
-					$video_details['source3'] = isset($_POST['source3']) && !empty($_POST['source3']) ? ($_POST['source3']) : '';
+					$video_details['url_flv1'] = isset($_POST['direct1']) && !empty($_POST['direct1']) ? ($_POST['direct1']) : '';
+					$video_details['url_flv2'] = isset($_POST['direct2']) && !empty($_POST['direct2']) ? ($_POST['direct2']) : '';
+					$video_details['direct1'] = isset($_POST['direct1']) && !empty($_POST['direct1']) ? ($_POST['direct1']) : '';
+					$video_details['direct2'] = isset($_POST['direct2']) && !empty($_POST['direct2']) ? ($_POST['direct2']) : '';
 					$video_details['country_id'] = isset($_POST['country_id']) && !empty($_POST['country_id']) ? ($_POST['country_id']) : 0;
 					$video_details['video_year'] = isset($_POST['video_year']) && !empty($_POST['video_year']) ? ($_POST['video_year']) : 0;
 					$video_details['video_type'] = isset($_POST['video_type']) && !empty($_POST['video_type']) ? ($_POST['video_type']) : 0;

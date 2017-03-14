@@ -89,6 +89,9 @@ switch ($submenu)
 		
 	break;
 	
+	case 'countries':
+		$menu = 'countries';
+		break;
 	case 'categories':
 	case 'edit_category':
 	
@@ -310,6 +313,10 @@ switch ($submenu)
 			<li <?php echo ($submenu == 'article_categories') ? 'class="active"' : ''; ?>><a href="categories.php?type=article">Article categories</a></li>
 			<?php } ?>
 		</ul>
+		</li>
+
+		<li class="pm-menu has-subcats <?php echo ($menu == 'countries') ? 'active' : ''; ?>">
+			<a href="countries.php" class="pm-menu-parent"><div class="pm-sprite ico-cats-new"></div> <span>Countries</span></a>
 		</li>
 
 		<li class="pm-menu has-subcats <?php echo ($menu == 'comments') ? 'active' : ''; ?>">

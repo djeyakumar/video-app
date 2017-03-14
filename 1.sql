@@ -106,3 +106,15 @@ ADD COLUMN alt_direct1 varchar(255) NULL DEFAULT '';
 
 ALTER TABLE pm_videos_urls
 ADD COLUMN alt_direct2 varchar(255) NULL DEFAULT '';
+
+ALTER TABLE pm_videos
+ADD COLUMN url_flv1 varchar(255) NULL DEFAULT '';
+
+ALTER TABLE pm_videos
+ADD COLUMN url_flv2 varchar(255) NULL DEFAULT '';
+
+ALTER TABLE pm_embed_code
+ADD COLUMN embed_code1 text NOT NULL DEFAULT '';
+
+ALTER TABLE pm_embed_code
+ADD COLUMN embed_code2 text NOT NULL DEFAULT '';
