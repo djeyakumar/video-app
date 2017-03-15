@@ -187,6 +187,7 @@ if ($_POST['submit'] != '')
 		$video_details['uniq_id'] = $uniq_id;
 		$video_details['yt_id'] = $uniq_id;
 		$modframework->trigger_hook('admin_streamvideo_uploadthumb');
+
 		if ($video_details['yt_thumb_local'] != '')
 		{
 			$tmp_parts = explode('/', $video_details['yt_thumb_local']);
@@ -226,9 +227,9 @@ if ($_POST['submit'] != '')
 
 			if (file_exists(_THUMBS_DIR_PATH . $thumb_filename))
 			{
-				if (rename(_THUMBS_DIR_PATH . $thumb_filename, _THUMBS_DIR_PATH . $uniq_id . '-1.'. $thumb_ext))
+				if (rename(_THUMBS_DIR_PATH . $thumb_filename, _THUMBS_DIR_PATH . "banner_" . $uniq_id . '-1.'. $thumb_ext))
 				{
-					$video_details['yt_banner'] = $uniq_id . '-1.'. $thumb_ext;
+					$video_details['yt_banner'] = "banner_" . $uniq_id . '-1.'. $thumb_ext;
 					$renamed = true;
 				}
 			}
@@ -237,6 +238,10 @@ if ($_POST['submit'] != '')
 			{
 				$video_details['yt_banner'] = $video_details['yt_banner_local'];
 			}
+		}
+		else
+		{
+			$video_details['yt_banner'] = $video_details['yt_banner'];
 		}
 
 		if (strlen($return_msg) == 0)
@@ -666,6 +671,7 @@ if ($_POST['submit'] != '')
             </div><!-- .controls .row-fluid -->
             </div>
 		</div>
+
 		<div class="widget border-radius4 shadow-div upload-file-dropzone" id="video-banner-dropzone">
 			<div class="pull-right">
 				<span class="btn fileinput-button">

@@ -637,7 +637,46 @@ if($_POST['submit'] != '')
 			unlink(_THUMBS_DIR_PATH . $uniq_id .'-social.jpg');
 		}
 	}
+
+
+	if ($input['yt_banner'] != $input['yt_banner_old'] && strpos($input['yt_banner'], 'http') !== false)
+	{
+		if (pm_get_file_extension($input['yt_banner']) == 'webp')
+		{
+			// replace .webp and _webp from URLs for youtube image URLs shown in Chrome
+			$input['yt_banner'] = str_replace(array('_webp', '.webp'), array('', '.jpg'), $input['yt_banner']);
+		}
+		
+		$download_thumb = $sources['localhost']['php_namespace'] .'\download_thumb';
+
+		if ( ! function_exists($download_thumb))
+		{
+			require_once( './src/localhost.php');
+		}
+		$img = $download_thumb($input['yt_banner'], _THUMBS_DIR_PATH, $uniq_id, true);
+		generate_social_thumb($img);
+	}
+
+	if ($input['yt_banner_local'] != '')
+	{
+		$input['yt_banner'] = $input['yt_banner_local'];
+	}
+
+	if ($input['yt_banner'] == '' && $input['yt_banner_old'] != '' && $input['yt_banner_local'] == '')
+	{
+		if (file_exists(_THUMBS_DIR_PATH . 'banner_' . $uniq_id .'-1.jpg'))
+		{
+			unlink(_THUMBS_DIR_PATH . 'banner_' . $uniq_id .'-1.jpg');
+		}
+
+		if (file_exists(_THUMBS_DIR_PATH . 'banner_' . $uniq_id .'-social.jpg'))
+		{
+			unlink(_THUMBS_DIR_PATH . 'banner_' . $uniq_id .'-social.jpg');
+		}
+	}
+
 	$sql .= ", yt_thumb = '". $input['yt_thumb'] ."'";
+	$sql .= ", yt_banner = '". $input['yt_banner'] ."'";
 	
 	$sql .= ", featured = '".$input['featured']."'";
 	$sql .= ", restricted = '".$input['restricted']."'";
@@ -1006,7 +1045,7 @@ switch($action)
 		
 		if ($video)
 		{
-			$sql = "INSERT INTO pm_videos_trash (id, uniq_id, video_title, description, yt_id, yt_length, yt_thumb, category, submitted_user_id, submitted, added, url_flv, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, video_slug, mp4, direct)
+			$sql = "INSERT INTO pm_videos_trash (id, uniq_id, video_title, description, yt_id, yt_length, yt_thumb, yt_banner, category, submitted_user_id, submitted, added, url_flv, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, video_slug, mp4, direct)
 						VALUES ('". $video['id'] ."',
 								'". $video['uniq_id'] ."', 
 								'". secure_sql($video['video_title']) ."', 
@@ -1014,6 +1053,7 @@ switch($action)
 								'". $video['yt_id'] ."', 
 								'". $video['yt_length'] ."', 
 								'". $video['yt_thumb'] ."', 
+								'". $video['yt_banner'] ."', 
 								'". $video['category'] ."', 
 								'". $video['submitted_user_id'] ."', 
 								'". $video['submitted'] ."', 
@@ -1093,7 +1133,7 @@ switch($action)
 		
 		$video_id = (count_entries('pm_videos', 'id', $video['id']) > 0) ? 'NULL' : $video['id'];
 		
-		$sql = "INSERT INTO pm_videos (id, uniq_id, video_title, description, yt_id, yt_length, yt_thumb, category, submitted_user_id, submitted, added, url_flv, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, video_slug)
+		$sql = "INSERT INTO pm_videos (id, uniq_id, video_title, description, yt_id, yt_length, yt_thumb, yt_banner, category, submitted_user_id, submitted, added, url_flv, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, video_slug)
 					VALUES ('". $video_id ."',
 							'". $video['uniq_id'] ."', 
 							'". secure_sql($video['video_title']) ."', 
@@ -1101,6 +1141,7 @@ switch($action)
 							'". $video['yt_id'] ."', 
 							'". $video['yt_length'] ."', 
 							'". $video['yt_thumb'] ."', 
+							'". $video['yt_banner'] ."',
 							'". $video['category'] ."', 
 							'". $video['submitted_user_id'] ."',
 							'". $video['submitted'] ."', 
@@ -1347,7 +1388,6 @@ if($r['added'] > time())
 	
 	</div><!-- .span8 -->
 	<div class="span3">
-
 		<div class="widget border-radius4 shadow-div upload-file-dropzone" id="video-thumb-dropzone">
 		<div class="pull-right">
 			<span class="btn fileinput-button">
@@ -1383,7 +1423,40 @@ if($r['added'] > time())
 			</div><!-- .controls .row-fluid -->
 			</div>
 		</div><!-- .widget -->
-		
+
+		<div class="widget border-radius4 shadow-div upload-file-dropzone" id="video-banner-dropzone">
+			<div class="pull-right">
+				<span class="btn fileinput-button">
+					<span>Change</span>
+					<input type="file" name="file" id="upload-video-banner-btn" />
+				</span>
+			</div>
+        	<h4>Banner</h4>
+            <div class="control-group container-fluid">
+	            <div class="controls row-fluid">
+		            <div id="video-banner-container">
+					<?php
+					if (strpos($r['yt_banner'], 'http') !== 0 && strpos($r['yt_banner'], '//') !== 0 && $r['yt_banner'] != '')
+					{
+						$r['yt_banner'] = _THUMBS_DIR . $r['yt_banner'];
+					}
+					if (empty($r['yt_banner'])) : ?>
+					<a href="#" id="show-banner" rel="tooltip" title="Click here to specify a custom banner URL" class="pm-sprite no-thumbnail"></a>
+					<?php else : ?>
+					<a href="#" id="show-banner" rel="tooltip" title="Click here to specify a custom banner URL"><img src="<?php echo make_url_https($r['yt_banner']); ?>?cache_buster=<?php echo $time_now;?>" style="display:block;min-width:120px;width:100%;min-height:80px; no-repeat center center;" /></a>
+					<?php endif; ?>
+
+		            <div class="">
+		                <div id="show-opt-banner">
+		                <br />
+		                <input type="text" name="yt_banner" value="<?php echo $r['yt_banner']; ?>" class="bigger span10" placeholder="http://" /> <i class="icon-info-sign" rel="tooltip" data-position="top" title="The thumbnail will refresh after you hit the 'Submit' button."></i>
+		                </div>
+		            </div><!-- .span8 -->
+		            </div>
+	            </div><!-- .controls .row-fluid -->
+            </div>
+        </div><!-- .widget -->
+
 		<div class="widget border-radius4 shadow-div upload-file-dropzone" id="subtitle-dropzone">
 			<h4>Subtitles  <i class="icon-info-sign" rel="popover" data-trigger="hover" data-animation="true" title="Subtitles" data-content="Select the language you intend to assign a subtitle file for and then click the 'Upload' button. You can also replace or delete existing subtitles in the same manner. If you don't see the 'Delete' link for a subtitle, simply refresh this page."></i></h4>
 			<div>

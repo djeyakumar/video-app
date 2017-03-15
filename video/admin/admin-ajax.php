@@ -4186,9 +4186,9 @@ switch ($page)
 									if ($_POST['upload-type'] == 'video-banner')
 									{
 										$img = new resize_img();
-										$img->sizelimit_x = THUMB_W_VIDEO;
-										$img->sizelimit_y = THUMB_H_VIDEO;
-										$img->keep_proportions = true;
+										$img->sizelimit_x = 1280;
+										$img->sizelimit_y = 586;
+										$img->keep_proportions = false;
 										$img->output = 'JPG';
 										
 										$uniq_id = $_POST['uniq_id'];
@@ -4197,6 +4197,7 @@ switch ($page)
 										{
 											$uniq_id = substr(md5($_POST['uniq_id'] . time()), 1, 8);
 										}
+										$uniq_id = 'banner_' . $uniq_id;
 										//$new_name = substr(md5($_POST['uniq_id'] . time()), 1, 8)."-1";
 										$new_name = $uniq_id . '-1';
 										$file_url = _THUMBS_DIR . $new_name . '.jpg';
@@ -4212,7 +4213,7 @@ switch ($page)
 										else
 										{
 											$img->save_resizedimage(_THUMBS_DIR_PATH, $new_name);
-											$html = '<img id="show-thumb" class="show-thumb-temp" src="'. $file_url .'?cachebuster='. time() .'" width="" height=""';
+											$html = '<img id="show-banner" class="show-thumb-temp" src="'. $file_url .'?cachebuster='. time() .'" width="" height=""';
 											$html .= ' vspace="" hspace="" border="0" alt="" />';
 											$html .= '<input type="hidden" name="yt_banner_local" value="'. $file_url .'" />';
 				

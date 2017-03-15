@@ -6215,7 +6215,7 @@ function apply_theme_customizations()
 function insert_new_video($video_details, &$insert_id) // moved from /admin/functions.php since version 2.0
 {
 	global $config;
-	
+
 	$defaults = array('language' => 1,
 					  'age_verification' => 0,
 					  'featured' => 0,
@@ -6257,7 +6257,7 @@ function insert_new_video($video_details, &$insert_id) // moved from /admin/func
 	{
 		$video_details['submitted_user_id'] = username_to_id($video_details['submitted']);
 	}
-	//print_r($video_details);exit();
+
 	$sql = "INSERT INTO pm_videos (uniq_id, video_title, description, yt_id, yt_length, yt_thumb, yt_banner, category, submitted_user_id, submitted, added, url_flv, url_flv1, url_flv2, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, country_id, video_year, video_type, recommended, video_slug)
 			VALUES ('". $video_details['uniq_id'] ."', 
 					'". secure_sql($video_details['video_title']) ."', 
