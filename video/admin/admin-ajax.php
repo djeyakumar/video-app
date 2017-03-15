@@ -4044,7 +4044,7 @@ switch ($page)
 							{
 								if ($file['size'] > 0)
 								{
-									if ($_POST['upload-type'] != 'logo' && $_POST['upload-type'] != 'video-thumb' && $_POST['upload-type'] != 'category-image')
+									if ($_POST['upload-type'] != 'logo' && $_POST['upload-type'] != 'video-thumb' && $_POST['upload-type'] != 'video-banner' && $_POST['upload-type'] != 'category-image')
 									{
 										// WYSIWYG editor 
 										$new_name = substr(md5($file['name'] . time()), 1, 8) . $ext;
@@ -4173,6 +4173,48 @@ switch ($page)
 											$html = '<img id="show-thumb" class="show-thumb-temp" src="'. $file_url .'?cachebuster='. time() .'" width="" height=""';
 											$html .= ' vspace="" hspace="" border="0" alt="" />';
 											$html .= '<input type="hidden" name="yt_thumb_local" value="'. $file_url .'" />';
+				
+											generate_social_thumb(_THUMBS_DIR_PATH . $new_name .'.jpg');
+										}
+										
+										exit(json_encode(array( 'success' => true,
+																'alert_type' => 'success',
+																'msg' => '',
+																'html' => $html)));
+									}
+
+									if ($_POST['upload-type'] == 'video-banner')
+									{
+										$img = new resize_img();
+										$img->sizelimit_x = THUMB_W_VIDEO;
+										$img->sizelimit_y = THUMB_H_VIDEO;
+										$img->keep_proportions = true;
+										$img->output = 'JPG';
+										
+										$uniq_id = $_POST['uniq_id'];
+										
+										if(empty($uniq_id)) 
+										{
+											$uniq_id = substr(md5($_POST['uniq_id'] . time()), 1, 8);
+										}
+										//$new_name = substr(md5($_POST['uniq_id'] . time()), 1, 8)."-1";
+										$new_name = $uniq_id . '-1';
+										$file_url = _THUMBS_DIR . $new_name . '.jpg';
+										
+										//	resize image and save it
+										if ($img->resize_image($file['tmp_name']) === false)
+										{
+											exit(json_encode(array( 'success' => false,
+																	'alert_type' => 'error',
+																	'msg' => $img->error,
+																	'html' => pm_alert_error($img->error, array('id' => '_error_')))));
+										}
+										else
+										{
+											$img->save_resizedimage(_THUMBS_DIR_PATH, $new_name);
+											$html = '<img id="show-thumb" class="show-thumb-temp" src="'. $file_url .'?cachebuster='. time() .'" width="" height=""';
+											$html .= ' vspace="" hspace="" border="0" alt="" />';
+											$html .= '<input type="hidden" name="yt_banner_local" value="'. $file_url .'" />';
 				
 											generate_social_thumb(_THUMBS_DIR_PATH . $new_name .'.jpg');
 										}

@@ -82,6 +82,7 @@ if ($_POST['submit'] != '')
 								'url_flv' => '',
 								'yt_thumb' => '',
 								'yt_thumb_local' => '',
+								'yt_banner'=>'',
 								'mp4' => '',
 								'direct' => '',
 								'tags' => '',
@@ -115,7 +116,9 @@ if ($_POST['submit'] != '')
 		$video_details['featured'] 	  = (int) $_POST['featured'];
 		$video_details['description'] = $_POST['description'];
 		$video_details['yt_thumb'] 	  = $_POST['yt_thumb'];
+		$video_details['yt_banner'] 	  = $_POST['yt_banner'];
 		$video_details['yt_thumb_local'] = $_POST['yt_thumb_local'];
+		$video_details['yt_banner_local'] = $_POST['yt_banner_local'];
 		$video_details['video_title'] = $_POST['video_title'];
 		$video_details['category'] 	  = (is_array($_POST['category'])) ? implode(',', $_POST['category']) : $_POST['category'];
 		$video_details['tags'] 		  = $_POST['tags'];
@@ -210,6 +213,30 @@ if ($_POST['submit'] != '')
 		else
 		{
 			$video_details['yt_thumb'] = $video_details['yt_thumb'];
+		}
+
+		if ($video_details['yt_banner_local'] != '')
+		{
+			$tmp_parts = explode('/', $video_details['yt_banner_local']);
+			$thumb_filename = array_pop($tmp_parts);
+			$tmp_parts = explode('.', $thumb_filename);
+			$thumb_ext = array_pop($tmp_parts);
+			$thumb_ext = strtolower($thumb_ext);
+			$renamed = false;
+
+			if (file_exists(_THUMBS_DIR_PATH . $thumb_filename))
+			{
+				if (rename(_THUMBS_DIR_PATH . $thumb_filename, _THUMBS_DIR_PATH . $uniq_id . '-1.'. $thumb_ext))
+				{
+					$video_details['yt_banner'] = $uniq_id . '-1.'. $thumb_ext;
+					$renamed = true;
+				}
+			}
+
+			if ( ! $renamed)
+			{
+				$video_details['yt_banner'] = $video_details['yt_banner_local'];
+			}
 		}
 
 		if (strlen($return_msg) == 0)
@@ -637,6 +664,34 @@ if ($_POST['submit'] != '')
             </div><!-- .span4 -->
 
             </div><!-- .controls .row-fluid -->
+            </div>
+		</div>
+		<div class="widget border-radius4 shadow-div upload-file-dropzone" id="video-banner-dropzone">
+			<div class="pull-right">
+				<span class="btn fileinput-button">
+					<span>Change</span>
+					<input type="file" name="file" id="upload-video-banner-btn" />
+				</span>
+			</div>
+        	<h4>Banner</h4>
+            <div class="control-group container-fluid">
+	            <div class="controls row-fluid">
+		            <div id="video-banner-container">
+					<?php
+					$inputs['yt_banner'] = ( ! empty($inputs['yt_banner_local']) ? $inputs['yt_banner'] = $inputs['yt_banner_local'] : $inputs['yt_banner'] = $inputs['yt_banner']);
+					if (empty($inputs['yt_banner'])) : ?>
+		            <a href="#" id="show-banner" rel="tooltip" title="Click here to specify a custom banner URL" class="pm-sprite no-thumbnail"></a>
+		            <?php else : ?>
+		            <a href="#" id="show-banner" rel="tooltip" title="Click here to specify a custom banner URL"><img src="<?php echo $inputs['yt_banner']; ?>" id="must" style="display:block;min-width:120px;width:100%;min-height:80px; no-repeat center center;" /></a>
+		            <?php endif; ?>
+		            <div class="">
+		                <div id="show-opt-banner">
+		                <br />
+		                <input type="text" name="yt_banner" value="<?php echo $inputs['yt_banner']; ?>" class="bigger span10" placeholder="http://" /> <i class="icon-info-sign" rel="tooltip" data-position="top" title="The thumbnail will refresh after you hit the 'Submit' button."></i>
+		                </div>
+		            </div><!-- .span8 -->
+		            </div>
+	            </div><!-- .controls .row-fluid -->
             </div>
         </div><!-- .widget -->
 

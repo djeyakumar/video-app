@@ -120,6 +120,37 @@ if ($total_featured_videos == 1)
 	$smarty->assign('video_subtitles', (array) get_video_subtitles($featured_videos[0]['uniq_id']));
 }
 
+require 'extensions/IMDBApi/class_IMDb.php';
+$imdb = new IMDb(true);
+$topimdb = array();
+$videos = $imdb->chart_top();
+$index = 0;
+$pageSize = 16;
+$page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
+foreach ($videos as $key => $video) {
+	if($video->type == "feature") {
+		$from = ($page * $pageSize) - $pageSize;
+		$to = ($page * $pageSize);
+		if($index >= $from && $index < $to ) {
+			$data = array(
+				"video_title"=>$video->title,
+				"rating"=>$video->rating,
+				"img_url"=>$video->image->url
+			);
+			$topimdb[] = $data;
+		}
+		$index++;
+	}
+}
+$featured_movies = get_videos("featured", $pageSize);
+$movie_videos = get_videos("movie", $pageSize);
+$tv_videos = get_videos("tv", $pageSize);
+
+$smarty->assign('featured_movies',$featured_movies);
+$smarty->assign('movie_videos',$movie_videos);
+$smarty->assign('tv_videos',$tv_videos);
+
+
 $smarty->assign('total_playingnow', $total_playingnow);
 $smarty->assign('playingnow', $playingnow);
 
@@ -128,6 +159,7 @@ $smarty->assign('featured_videos_total', $total_featured_videos);
 $smarty->assign('featured_channels', get_featured_channels());
 $smarty->assign('new_videos', $new_videos);
 $smarty->assign('top_videos', $top_videos);
+$smarty->assign('topimdb', $topimdb);
 $smarty->assign('categories', $_video_categories);
 $smarty->assign('featured_categories_data', $featured_categories_data);
 // --- DEFAULT SYSTEM FILES - DO NOT REMOVE --- //

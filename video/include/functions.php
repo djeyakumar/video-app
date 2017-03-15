@@ -6258,13 +6258,14 @@ function insert_new_video($video_details, &$insert_id) // moved from /admin/func
 		$video_details['submitted_user_id'] = username_to_id($video_details['submitted']);
 	}
 	//print_r($video_details);exit();
-	$sql = "INSERT INTO pm_videos (uniq_id, video_title, description, yt_id, yt_length, yt_thumb, category, submitted_user_id, submitted, added, url_flv, url_flv1, url_flv2, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, country_id, video_year, video_type, recommended, video_slug)
+	$sql = "INSERT INTO pm_videos (uniq_id, video_title, description, yt_id, yt_length, yt_thumb, yt_banner, category, submitted_user_id, submitted, added, url_flv, url_flv1, url_flv2, source_id, language, age_verification, yt_views, site_views, featured, restricted, allow_comments, allow_embedding, country_id, video_year, video_type, recommended, video_slug)
 			VALUES ('". $video_details['uniq_id'] ."', 
 					'". secure_sql($video_details['video_title']) ."', 
 					'". secure_sql($video_details['description']) ."', 
 					'". $video_details['yt_id'] ."', 
 					'". (int) $video_details['yt_length'] ."', 
 					'". $video_details['yt_thumb'] ."', 
+					'". $video_details['yt_banner'] ."', 
 					'". $video_details['category'] ."', 
 					'". $video_details['submitted_user_id'] ."',
 					'". $video_details['submitted'] ."', 
@@ -7857,4 +7858,71 @@ function get_true_max_filesize()
 	$max_size = ($upload_max_filesize < $post_max_size) ? $upload_max_filesize : $post_max_size;
 	
 	return $max_size;
+}
+
+function get_videos($type, $limit = 8)
+{
+	$sql	= '';
+
+	switch ($type)
+	{
+		case 'movie':
+			$sql = "SELECT uniq_id  
+					FROM pm_videos 
+					WHERE video_type='0' 
+					ORDER BY site_views DESC  
+					LIMIT ".$limit;
+		break;
+
+		case 'tv':
+			$sql = "SELECT uniq_id  
+					FROM pm_videos 
+					WHERE video_type='1' 
+					ORDER BY site_views DESC  
+					LIMIT ".$limit;
+		break;
+
+		case 'recommended':
+			$sql = "SELECT uniq_id  
+					FROM pm_videos 
+					WHERE recommended='1' 
+					ORDER BY site_views DESC  
+					LIMIT ".$limit;
+		break;
+
+		case 'featured':
+			$sql = "SELECT uniq_id  
+					FROM pm_videos 
+					WHERE featured='1' 
+					ORDER BY site_views DESC  
+					LIMIT ".$limit;
+		break;
+
+	}
+
+	$result = @mysql_query($sql);
+	if ( ! $result)
+	{
+		return array();
+	}
+	
+	$uniq_ids = array();
+
+	while ($row = mysql_fetch_assoc($result))
+	{
+		$uniq_ids[] = $row['uniq_id'];
+	}
+	
+	if(empty($uniq_ids)) {
+		return array();
+	}
+
+	$list = get_video_list('', '', 0, $limit, 0, array(), $uniq_ids);
+	
+	if (count($list) == 0)
+	{
+		return array();
+	}
+
+	return $list;
 }

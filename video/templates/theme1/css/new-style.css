@@ -3943,6 +3943,7 @@ i.i-playlists {
     margin: 0 0 -4px;
     padding: 0;
     display: block;
+	width:100%;
 }
 
 #preroll_placeholder {
@@ -4153,7 +4154,7 @@ i.i-playlists {
     -moz-transition: all 5s ease;
     -o-transition: all 5s ease;
     transition: all 5s ease;
-    min-width: 638px;
+    min-width: 100%;
 }
 
 .pm-author-data {

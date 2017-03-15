@@ -1,16 +1,13 @@
 {include file='header.tpl' p="index"} 
-    <div class="slider swiper-container">
+<div class="container new-con" style="position: relative;width: 1595px; background: #fff; box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2); padding-bottom: 0px; padding:0;">
+    <div class="slider swiper-container" id="slider">
         <div class="swiper-wrapper">
             {foreach from=$top_videos key=k item=video_data}
             <div class="item swiper-slide" style="background-image: url({$smarty.const._URL}/templates/{$template_dir}/{$video_data.yt_banner})">
                 <div class="container">
-                    <div class="inner"><a href="{$video_data.video_href}" class="name">{$video_data.video_title}</a> 
-                        {if $video_data.yt_length != 0}
-                        <div class="meta"><span class="quality">{$video_data.duration}</span></div>
-                        {/if}
-                        <span class="category">{$video_data.views_compact}<a href="{$video_data.video_href}"> {$lang.views}</a></span> 
-                        <p class="desc">{$video_data.description}</p>
-                    </div>
+					<div class="slide-caption"> <h2>Why Him?</h2> <p class="sc-desc">Over the holidays, Ned (Bryan Cranston), an overprotective but loving dad and his family visit his daughter at Stanford, where he meets his biggest nightmare: her well-meaning but socially awkward Silicon Valley billionaire boyfriend, Laird ...</p> <div class="slide-caption-info"> <div class="block"><strong>Genre:</strong> <a href="javascript:;" title="Comedy Movies">Comedy</a> </div> <div class="block"><strong>Duration:</strong> 111 min</div> <div class="block"><strong>Release:</strong> 2016</div> <div class="block"><strong>IMDb:</strong> 6.6</div> </div> 
+					<a href="javascript:;" class="btn btn-success mt20"> Watching </a> 
+					</div>
                 </div>
             </div>
             {/foreach}
@@ -77,40 +74,25 @@
             </div>
         </div>
     </div>
+	
+    <div class="home-socials" style="margin-bottom: 5px; padding: 5px 0 5px 15px; margin-top: 10px;">
+        <div> <span class="text">Like and share our website to support us.</span> 
+        </div>
+        <!-- change social plugin-->
+        <div style="float: left;" class="addthis_native_toolbox" data-url="javascript:;" data-title="Watch Online Movies Free - Free Movies | Video123" data-description="Free Movies. Watch Movies Online free, in high quality. You also can download any movie and series without registration. Watch latest movies in HD for free, free movies streaming now. watch online movies">
+            <div id="atstbx" class="at-share-tbx-element at-share-tbx-native addthis_default_style addthis_20x20_style addthis-smartlayers addthis-animated at4-show">
+                <a class="addthis_counter addthis_pill_style at_native_button addthis_nonzero" href="#" style="display: inline-block;"></a>
+                <div class="atclear"></div>
+            </div>
+        </div>
+        <!-- change social plugin-->
+        <div class="clearfix"></div>
+    </div>
+	
+</div>	
 </div>
 <div id="body-wrapper">
     <div class="container container-custom">
-        <div class="home-socials">
-            <div> <span class="text">Like and share our website to support us.</span> 
-            </div>
-            <!-- change social plugin-->
-            <div style="float:left;" class="hidden-xs fb-like fb_iframe_widget"><span style="vertical-align: bottom; width: 73px; height: 20px;"><iframe name="f15c6eb22aad4ac" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.7/plugins/like.php?action=like&amp;app_id=1262034157158608&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2Fao6eUeuGXQq.js%3Fversion%3D42%23cb%3Df64176090945e8%26domain%3Dfmovies.se%26origin%3Dhttps%253A%252F%252Ffmovies.se%252Ff24e4efd7310ab4%26relation%3Dparent.parent&amp;container_width=0&amp;href=https%3A%2F%2Ffacebook.com%2Ffmoviesdotto&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=true" style="border: none; visibility: visible; width: 73px; height: 20px;" class=""></iframe></span>
-            </div>
-            <div style="float: left;" class="addthis_native_toolbox" data-url="javascript:;" data-title="Watch Online Movies Free - Free Movies | FMovies" data-description="Free Movies. Watch Movies Online free, in high quality. You also can download any movie and series without registration. Watch latest movies in HD for free, free movies streaming now. watch online movies">
-                <div id="atstbx" class="at-share-tbx-element at-share-tbx-native addthis_default_style addthis_20x20_style addthis-smartlayers addthis-animated at4-show">
-                    <a class="addthis_button_facebook_share at_native_button at300b" fb:share:layout="button_count">
-                        <div class="fb-share-button fb_iframe_widget" data-layout="button_count" data-href="javascript:;" style="height: 25px;" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=1262034157158608&amp;container_width=85&amp;href=https%3A%2F%2Ffmovies.se%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey"><span style="vertical-align: bottom; width: 84px; height: 20px;"><iframe name="f30be2daacb4b58" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:share_button Facebook Social Plugin" src="https://www.facebook.com/v2.7/plugins/share_button.php?app_id=1262034157158608&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2Fao6eUeuGXQq.js%3Fversion%3D42%23cb%3Df1467a6da77f5a%26domain%3Dfmovies.se%26origin%3Dhttps%253A%252F%252Ffmovies.se%252Ff24e4efd7310ab4%26relation%3Dparent.parent&amp;container_width=85&amp;href=https%3A%2F%2Ffmovies.se%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey" style="border: none; visibility: visible; width: 84px; height: 20px;" class=""></iframe></span>
-                        </div>
-                    </a>
-                    <a class="addthis_button_facebook_send at_native_button at300b">
-                        <div class="fb-send fb_iframe_widget" data-href="javascript:;" data-type="box_count" style="height: 25px;" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=1262034157158608&amp;container_width=54&amp;href=https%3A%2F%2Ffmovies.se%2F&amp;locale=en_US&amp;sdk=joey"><span style="vertical-align: bottom; width: 54px; height: 20px;"><iframe name="f173ea997f8d684" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:send Facebook Social Plugin" src="https://www.facebook.com/v2.7/plugins/send.php?app_id=1262034157158608&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2Fao6eUeuGXQq.js%3Fversion%3D42%23cb%3Df3c4c63bec2d774%26domain%3Dfmovies.se%26origin%3Dhttps%253A%252F%252Ffmovies.se%252Ff24e4efd7310ab4%26relation%3Dparent.parent&amp;container_width=54&amp;href=https%3A%2F%2Ffmovies.se%2F&amp;locale=en_US&amp;sdk=joey" style="border: none; visibility: visible; width: 54px; height: 20px;" class=""></iframe></span>
-                        </div>
-                    </a>
-                    <a class="addthis_button_tweet at_native_button at300b">
-                        <div class="tweet_iframe_widget" style="width: 62px; height: 25px;"><span><iframe id="twitter-widget-2" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.a0ec3119d8db2bc5422f2144c89ad7a9.en.html#dnt=false&amp;id=twitter-widget-2&amp;lang=en&amp;original_referer=https%3A%2F%2Ffmovies.se%2F&amp;size=m&amp;text=Watch%20Online%20Movies%20Free%20-%20Free%20Movies%20%7C%20FMovies%3A&amp;time=1488111664373&amp;type=share&amp;url=https%3A%2F%2Ffmovies.se%2F%23.WLLILSThVW0.twitter" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="javascript:;#.WLLILSThVW0.twitter"></iframe></span>
-                        </div>
-                    </a>
-                    <a class="addthis_button_google_plusone at_native_button at300b" g:plusone:size="medium">
-                        <div class="google_plusone_iframe_widget" style="width: 90px; height: 25px;"><span><div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 90px; height: 20px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1488111664346" name="I0_1488111664346" src="https://apis.google.com/u/0/se/0/_/+1/fastbutton?usegapi=1&amp;size=medium&amp;hl=en-US&amp;origin=https%3A%2F%2Ffmovies.se&amp;url=https%3A%2F%2Ffmovies.se%2F&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.-fasA9ieQ_Q.O%2Fm%3D__features__%2Fam%3DAQ%2Frt%3Dj%2Fd%3D1%2Frs%3DAGLTcCPkhNGIivn4XTNYYb-_ttaiW1kAhw#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh&amp;id=I0_1488111664346&amp;parent=https%3A%2F%2Ffmovies.se&amp;pfname=&amp;rpctoken=26081870" data-gapiattached="true" title="+1"></iframe></div></span>
-                        </div>
-                    </a><a class="addthis_counter addthis_pill_style at_native_button addthis_nonzero" href="#" style="display: inline-block;"><a class="atc_s addthis_button_compact">Share<span></span></a><a class="addthis_button_expanded" target="_blank" title="More" href="#">6.3K</a></a>
-                    <div class="atclear"></div>
-                </div>
-            </div>
-            <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-follow-button twitter-follow-button-rendered" title="Twitter Follow Button" src="https://platform.twitter.com/widgets/follow_button.a0ec3119d8db2bc5422f2144c89ad7a9.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;screen_name=fmoviesdotto&amp;show_count=true&amp;show_screen_name=true&amp;size=m&amp;time=1488111663445" style="position: static; visibility: visible; width: 228px; height: 20px;" data-screen-name="fmoviesdotto"></iframe>
-            <!-- change social plugin-->
-            <div class="clearfix"></div>
-        </div>
         
         <div class="alert alert-primary notice">
             <h1>Watch Free Movies Online</h1> {$meta_title} - just a faster and better place for watching online movies for free.
@@ -130,17 +112,20 @@
             </div>
         </div>
         
-        <div class="widget recommend">
+        <div class="widget suggestion">
             <div class="widget-title">
-				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
-                <h2>{$lang.top_videos}</h2> 
-                <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
+				<a class="more" href="topvideos.php">View more <i class="fa fa-caret-right"></i></a>
+                <h2>Suggestion</h2> 
+                <div class="tabs" data-target=".widget.suggestion .content">
+                    <a class="tab active" data-name="views-feature">Featured Movies</a>
+                    <a class="tab" data-name="views-today">Top view today</a>
+                    <a class="tab" data-name="views-imdb">Top IMDB</a>
                 </div>
             </div>
             <div class="widget-body">
-                <div class="content" data-name="recommend">
+                <div class="content active" data-name="views-feature">
                     <div class="row movie-list">
-                    	{foreach from=$top_videos key=k item=video_data}
+                    	{foreach from=$featured_movies key=k item=video_data}
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                             	{if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
@@ -151,15 +136,44 @@
                                 </a>
                                 <a class="name" href="{$video_data.video_href}">{$video_data.video_title}</a>
                             </div>
-                            <span class="pm-video-attr-author">{$lang.articles_by} <a href="{$video_data.author_profile_href}">{$video_data.author_name}</a></span>
-                            <span><small>{$lang.added} <time datetime="{$video_data.html5_datetime}" title="{$video_data.full_datetime}">{$video_data.time_since_added} {$lang.ago}</time></small></span>
-						    <span><small>{$video_data.views_compact} {$lang.views} / {$video_data.likes_compact} {$lang._likes}</small></span>
 						    <p class="desc" rel="tooltip" title="{$video_data.excerpt}">{$video_data.excerpt}</p>
-						    {if $video_data.featured}
-						    <span class="pm-video-li-info">
-						    <span class="label label-featured">{$lang._feat}</span>
-						    </span>
-						    {/if}
+                        </div>
+                        {foreachelse}
+                            {$lang.top_videos_msg2}
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="content hidden" data-name="views-today">
+                    <div class="row movie-list">
+                        {foreach from=$top_videos key=k item=video_data}
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
+                            <div class="item">
+                                {if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
+                                {if $video_data.mark_new}<div class="quality">{$lang._new}</div>{/if}
+                                {if $video_data.mark_popular}<div class="status"><span>{$lang._popular}</span></div>{/if}
+                                <a class="poster" href="{$video_data.video_href}">
+                                    <img src="{$video_data.thumb_img_url}" alt="{$video_data.attr_alt}">
+                                </a>
+                                <a class="name" href="{$video_data.video_href}">{$video_data.video_title}</a>
+                            </div>
+                            <p class="desc" rel="tooltip" title="{$video_data.excerpt}">{$video_data.excerpt}</p>
+                        </div>
+                        {foreachelse}
+                        {$lang.top_videos_msg2}
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="content hidden" data-name="views-imdb">
+                    <div class="row movie-list">
+                        {foreach from=$topimdb key=k item=video_data}
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
+                            <div class="item">
+                                {if $video_data.rating}<div class="quality"><span>{$video_data.rating}</span></div>{/if}
+                                <a class="poster" href="{$video_data.video_href}">
+                                    <img src="{$video_data.img_url}">
+                                </a>
+                                <a class="name" href="#">{$video_data.video_title}</a>
+                            </div>
                         </div>
                         {foreachelse}
                         {$lang.top_videos_msg2}
@@ -175,17 +189,15 @@
             </div>
         </div>
 
-        <div class="widget recommend">
+        <div class="widget">
             <div class="widget-title">
-				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
-                <h2>{$lang.new_videos}</h2> 
-                <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
-                </div>
+                <a class="more" href="videotype.php?type=0">View more <i class="fa fa-caret-right"></i></a>
+                <h2>Movies</h2>
             </div>
             <div class="widget-body">
-                <div class="content" data-name="recommend">
+                <div class="content">
                     <div class="row movie-list">
-                        {foreach from=$new_videos key=k item=video_data}
+                        {foreach from=$movie_videos key=k item=video_data}
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                                 {if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
@@ -196,18 +208,10 @@
                                 </a>
                                 <a class="name" href="{$video_data.video_href}">{$video_data.video_title}</a>
                             </div>
-                            <span class="pm-video-attr-author">{$lang.articles_by} <a href="{$video_data.author_profile_href}">{$video_data.author_name}</a></span>
-                            <span><small>{$lang.added} <time datetime="{$video_data.html5_datetime}" title="{$video_data.full_datetime}">{$video_data.time_since_added} {$lang.ago}</time></small></span>
-                            <span><small>{$video_data.views_compact} {$lang.views} / {$video_data.likes_compact} {$lang._likes}</small></span>
                             <p class="desc" rel="tooltip" title="{$video_data.excerpt}">{$video_data.excerpt}</p>
-                            {if $video_data.featured}
-                            <span class="pm-video-li-info">
-                            <span class="label label-featured">{$lang._feat}</span>
-                            </span>
-                            {/if}
                         </div>
                         {foreachelse}
-                        {$lang.top_videos_msg2}
+                            {$lang.top_videos_msg2}
                         {/foreach}
                     </div>
                 </div>
@@ -220,17 +224,15 @@
             </div>
         </div>
 
-        <div class="widget recommend">
+        <div class="widget">
             <div class="widget-title">
-				<a class="more" href="javascript:;">View more <i class="fa fa-caret-right"></i></a>
-                <h2>FEATURED MOVIES</h2> 
-                <div class="tabs" data-target=".widget.recommend .content"> <a class="tab active" data-name="recommend">Recommended</a>  <a class="tab" data-name="views-week">Most Watched This Week</a>  <a class="tab" data-name="views-month">Most Watched This Month</a>  <a class="tab" data-name="most-favorited">Most Favorited</a> 
-                </div>
+                <a class="more" href="videotype.php?type=1">View more <i class="fa fa-caret-right"></i></a>
+                <h2>TV Series</h2>
             </div>
             <div class="widget-body">
-                <div class="content" data-name="recommend">
+                <div class="content">
                     <div class="row movie-list">
-                        {foreach from=$featured_videos key=k item=video_data}
+                        {foreach from=$tv_videos key=k item=video_data}
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-xs-12">
                             <div class="item">
                                 {if $video_data.yt_length != 0}<div class="quality">{$video_data.duration}</div>{/if}
@@ -241,18 +243,10 @@
                                 </a>
                                 <a class="name" href="{$video_data.video_href}">{$video_data.video_title}</a>
                             </div>
-                            <span class="pm-video-attr-author">{$lang.articles_by} <a href="{$video_data.author_profile_href}">{$video_data.author_name}</a></span>
-                            <span><small>{$lang.added} <time datetime="{$video_data.html5_datetime}" title="{$video_data.full_datetime}">{$video_data.time_since_added} {$lang.ago}</time></small></span>
-                            <span><small>{$video_data.views_compact} {$lang.views} / {$video_data.likes_compact} {$lang._likes}</small></span>
                             <p class="desc" rel="tooltip" title="{$video_data.excerpt}">{$video_data.excerpt}</p>
-                            {if $video_data.featured}
-                            <span class="pm-video-li-info">
-                            <span class="label label-featured">{$lang._feat}</span>
-                            </span>
-                            {/if}
                         </div>
                         {foreachelse}
-                        {$lang.top_videos_msg2}
+                            {$lang.top_videos_msg2}
                         {/foreach}
                     </div>
                 </div>

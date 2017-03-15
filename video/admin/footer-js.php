@@ -900,6 +900,49 @@ $(function () {
 	.bind('fileuploadfail', function (e, data) {
 		pm_fileupload_fail(e, data);
 	});
+
+	$('#upload-video-banner-btn').fileupload(
+		$.extend({}, pm_fileupload_single_options, {
+			dropZone: $('#video-banner-dropzone')
+		})
+	)
+	.bind('fileuploadadd', function (e, data) {
+		
+		$('input[name="upload-type"]').val('video-banner');
+		$('input[name="do"]').val('upload-image');
+		
+		pm_fileupload_add(e, data);
+		
+		if (data.files.length > 0) {
+			data.submit();
+		}
+	})
+	.bind('fileuploadsubmit', function (e, data) {
+		pm_fileupload_submit(e, data);
+	})
+	.bind('fileuploadstart', function (e, data) {
+		pm_fileupload_start(e, data);
+	})
+	.bind('fileuploadprogress', function (e, data) {
+		pm_fileupload_progress(e, data);
+	})
+	.bind('fileuploadprogressall', function (e, data) {
+		pm_fileupload_progress_all(e, data);
+	})
+	.bind('fileuploaddone', function (e, data) { 
+		$.each(data.files, function (index, file) {
+			var server_response = $.parseJSON(data.jqXHR.responseText);			
+			
+			if (server_response.success == true) {
+				$('#video-banner-container').html(server_response.html);
+			}
+		});
+		
+		pm_fileupload_done(e, data);
+	})
+	.bind('fileuploadfail', function (e, data) {
+		pm_fileupload_fail(e, data);
+	});
 	
 	/*
 	 * Video source file uploader

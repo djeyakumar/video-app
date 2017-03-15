@@ -44,7 +44,7 @@
 	<link href="{$smarty.const._URL}/templates/{$template_dir}/css/style.css" rel="stylesheet">
 	<link href="{$smarty.const._URL}/templates/{$template_dir}/css/styles.css" rel="stylesheet">
 	<link href="{$smarty.const._URL}/templates/{$template_dir}/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
 	<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	{if $tpl_name == 'video-watch' && $playlist}
