@@ -2,11 +2,26 @@
 <div class="container new-con" style="position: relative;width: 1595px; background: #fff; box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2); padding-bottom: 0px; padding:0;">
     <div class="slider swiper-container" id="slider">
         <div class="swiper-wrapper">
-            {foreach from=$top_videos key=k item=video_data}
-            <div class="item swiper-slide" style="background-image: url({$smarty.const._URL}/templates/{$template_dir}/{$video_data.yt_banner})">
+            {foreach from=$recommended_movies key=k item=video_data}
+            <div class="item swiper-slide" style="background-image: url({$video_data.yt_banner})">
                 <div class="container">
-					<div class="slide-caption"> <h2>Why Him?</h2> <p class="sc-desc">Over the holidays, Ned (Bryan Cranston), an overprotective but loving dad and his family visit his daughter at Stanford, where he meets his biggest nightmare: her well-meaning but socially awkward Silicon Valley billionaire boyfriend, Laird ...</p> <div class="slide-caption-info"> <div class="block"><strong>Genre:</strong> <a href="javascript:;" title="Comedy Movies">Comedy</a> </div> <div class="block"><strong>Duration:</strong> 111 min</div> <div class="block"><strong>Release:</strong> 2016</div> <div class="block"><strong>IMDb:</strong> 6.6</div> </div> 
-					<a href="javascript:;" class="btn btn-success mt20"> Watching </a> 
+					<div class="slide-caption">
+                        <h2><a href="{$video_data.video_href}">{$video_data.video_title}</a></h2>
+                        <p class="sc-desc">{$video_data.description}</p>
+                        <div class="slide-caption-info">
+                            <!-- <div class="block">
+                                <strong>Genre:</strong>
+                                <a href="javascript:;" title="Comedy Movies">Comedy</a>
+                            </div> -->
+                            <div class="block">
+                                <strong>Duration:</strong> {$video_data.duration} min
+                            </div>
+                            <div class="block">
+                                <strong>Release:</strong> {$video_data.video_year}
+                            </div>
+                            <div class="block"><strong>Views:</strong> {$video_data.yt_views}</div>
+                        </div> 
+					    <a href="{$video_data.video_href}" class="btn btn-success mt20"> Watch </a> 
 					</div>
                 </div>
             </div>
@@ -73,20 +88,6 @@
                 </div>
             </div>
         </div>
-    </div>
-	
-    <div class="home-socials" style="margin-bottom: 5px; padding: 5px 0 5px 15px; margin-top: 10px;">
-        <div> <span class="text">Like and share our website to support us.</span> 
-        </div>
-        <!-- change social plugin-->
-        <div style="float: left;" class="addthis_native_toolbox" data-url="javascript:;" data-title="Watch Online Movies Free - Free Movies | Video123" data-description="Free Movies. Watch Movies Online free, in high quality. You also can download any movie and series without registration. Watch latest movies in HD for free, free movies streaming now. watch online movies">
-            <div id="atstbx" class="at-share-tbx-element at-share-tbx-native addthis_default_style addthis_20x20_style addthis-smartlayers addthis-animated at4-show">
-                <a class="addthis_counter addthis_pill_style at_native_button addthis_nonzero" href="#" style="display: inline-block;"></a>
-                <div class="atclear"></div>
-            </div>
-        </div>
-        <!-- change social plugin-->
-        <div class="clearfix"></div>
     </div>
 	
 </div>	

@@ -9151,6 +9151,7 @@ body .jw-skin-seven .jw-knob {
 }
 .slide-caption {
     position: absolute;
+    z-index: 999;
     right: 0px;
     top: 0;
     opacity: 0;

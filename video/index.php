@@ -143,10 +143,12 @@ foreach ($videos as $key => $video) {
 	}
 }
 $featured_movies = get_videos("featured", $pageSize);
+$recommended_movies = get_videos("recommended", 5);
 $movie_videos = get_videos("movie", $pageSize);
 $tv_videos = get_videos("tv", $pageSize);
-
-$smarty->assign('featured_movies',$featured_movies);
+//print_r($recommended_movies);exit();
+$smarty->assign('featured_videos', $featured_videos);
+$smarty->assign('recommended_movies',$recommended_movies);
 $smarty->assign('movie_videos',$movie_videos);
 $smarty->assign('tv_videos',$tv_videos);
 
