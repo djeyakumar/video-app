@@ -7860,46 +7860,60 @@ function get_true_max_filesize()
 	return $max_size;
 }
 
-function get_videos($type, $limit = 8)
+function get_videos($type, $max = 8, $page = 1)
 {
 	$sql	= '';
-
+	$order = "site_views";
+	$condition = "";
 	switch ($type)
 	{
 		case 'movie':
-			$sql = "SELECT uniq_id  
-					FROM pm_videos 
-					WHERE video_type='0' 
-					ORDER BY site_views DESC  
-					LIMIT ".$limit;
+			$condition = "video_type='0'";
+			$order = "site_views DESC";
 		break;
 
 		case 'tv':
-			$sql = "SELECT uniq_id  
-					FROM pm_videos 
-					WHERE video_type='1' 
-					ORDER BY site_views DESC  
-					LIMIT ".$limit;
+			$condition = "video_type='1'";
+			$order = "site_views DESC";
 		break;
 
 		case 'recommended':
-			$sql = "SELECT uniq_id  
-					FROM pm_videos 
-					WHERE recommended='1' 
-					ORDER BY site_views DESC  
-					LIMIT ".$limit;
+			$condition = "recommended='1'";
+			$order = "site_views DESC";
 		break;
 
 		case 'featured':
-			$sql = "SELECT uniq_id  
-					FROM pm_videos 
-					WHERE featured='1' 
-					ORDER BY site_views DESC  
-					LIMIT ".$limit;
+			$condition = "featured='1'";
+			$order = "site_views DESC";
+		case 'letter':
+			$q = isset($_GET['q']) && !empty($_GET['q']) ? $_GET['q'] : '0-9';
+			if($q == "0-9") {
+				$condition = "video_title regexp '^[0-9]+'";
+				$order = "video_title";
+			} else {
+				$condition = "video_title like '{$q}%'";
+				$order = "video_title";
+			}
 		break;
-
 	}
 
+	$sql = "SELECT COUNT(*) as total 
+			FROM pm_videos 
+			WHERE {$condition}";
+
+	$result = @mysql_query($sql);
+	$row = mysql_fetch_assoc($result);
+	$total = (int) $row['total'];
+
+	$minLimit = (($page * $max) - $max + 1);
+	$maxLimit = ($page * $max);
+
+	$limit = ($total > $max) ? $minLimit . ", " . $maxLimit : $max;
+	$sql = "SELECT uniq_id  
+					FROM pm_videos 
+					WHERE {$condition} 
+					ORDER BY {$order}  
+					LIMIT {$limit}";
 	$result = @mysql_query($sql);
 	if ( ! $result)
 	{
@@ -7917,12 +7931,12 @@ function get_videos($type, $limit = 8)
 		return array();
 	}
 
-	$list = get_video_list('', '', 0, $limit, 0, array(), $uniq_ids);
+	$list = get_video_list('', '', 0, $max, 0, array(), $uniq_ids);
 	
 	if (count($list) == 0)
 	{
 		return array();
 	}
 
-	return $list;
+	return array('total'=>$total, 'videos'=>$list);
 }

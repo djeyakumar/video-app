@@ -219,7 +219,7 @@
 				</li>
 				<li> <a title="Movies" href="topimdb.php">TOP IMDB</a> 
 				</li>
-				<li> <a title="Movies" href="javascript:;/movies">A-Z List</a> 
+				<li> <a title="Movies" href="library.php">A-Z List</a> 
 				</li>
 				<li> <a title="Request" href="javascript:;/movies">Request</a> 
 				</li>
